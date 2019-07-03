@@ -1,0 +1,10 @@
+{% extends "polls/base.html" %}
+   {% block title %}
+     <title>Offered Per Semester</title>
+   {% endblock %}
+     {% block content %}
+        <h1> Offered Per Semester </h1>
+	      {% for value in ret %}
+	         <p>{{ value }} </p>
+	      {% endfor %}
+     {% endblock %}

@@ -1,0 +1,21 @@
+li a {
+    color: green;
+}
+
+.sidebar-nav {
+    margin-top: 20px;
+    padding: 0;
+    list-style: none;
+}
+
+div.a {
+  float: left;
+}
+
+div.header {
+  padding: 1px;
+  text-align: center;
+  background: #1abc9c;
+  color: white;
+  font-size: 30px;
+}

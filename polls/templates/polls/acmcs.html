@@ -1,0 +1,22 @@
+{% extends "polls/base.html" %}
+   {% block title %}
+     <title>ACM CS Standards</title>
+   {% endblock %}
+     {% block content %}
+        <h1> ACM CS Standards </h1>
+	      {% for value in values %}
+                {% if 'Knowledge Area' in value %}
+                  <h3>{{ value }}</h2>
+                {% endif %}
+                {% if 'topic importance' in value %}
+                  <ul>
+                    <li>{{ value }}</li>
+                  </ul>
+                {% endif %}
+                {% if 'outcome importance' in value %}
+                  <ul>
+                    <li>{{ value }}</li>
+                  </ul>
+                {% endif %}
+	      {% endfor %}
+     {% endblock %}

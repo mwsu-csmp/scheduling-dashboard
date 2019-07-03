@@ -1,0 +1,10 @@
+{% extends "polls/base.html" %}
+   {% block title %}
+     <title>CSC274</title>
+   {% endblock %}
+     {% block content %}
+        <h1> CSC274 </h1>
+	      {% for value in values %}
+	         <p>{{ value }} </p>
+	      {% endfor %}
+     {% endblock %}
