@@ -1,10 +1,12 @@
 import xml.dom.minidom as minidom
 import os
-from os import walk
+import lxml.html
+from lxml import etree
 from collections import defaultdict
 from xml.dom.minidom import Node
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render_to_response
+from django.http import HttpResponse 
 from django.template import loader
 
 from .models import say_something, xml_output, hours_per_semester_f
@@ -39,79 +41,25 @@ def courselist(request):
     return HttpResponse(template.render(context, request))
 
 def parseSyllabiXml(request, xmldocname):
-    xmldoc = minidom.parse(xmldocname)
-    college = xmldoc.getElementsByTagName('college')
-    subject = xmldoc.getElementsByTagName('subject')
-    number = xmldoc.getElementsByTagName('number')
-    title = xmldoc.getElementsByTagName('title')
-    offered = xmldoc.getElementsByTagName('offered')
-    scheduleType = xmldoc.getElementsByTagName('scheduleType')
-    catalogDescription = xmldoc.getElementsByTagName('catalogDescription')
-    prerequisites = xmldoc.getElementsByTagName('prerequisites')
-    objectives = xmldoc.getElementsByTagName('objectives')
-    outline = xmldoc.getElementsByTagName('outline')
-    values = []
-    for s in college :
-        textvalue = s.firstChild.data
-        values.append('College: ' + textvalue)
+    ## This sets the chosen xml file and sets it to the xslt file.
+    xslt_doc = etree.parse("curriculum/syllabi/syllabus-to-html.xsl")
+    xslt_transformer = etree.XSLT(xslt_doc)
+ 
+    source_doc = etree.parse(xmldocname)
+    output_doc = xslt_transformer(source_doc)
+    #print(str(output_doc))
+    return HttpResponse(output_doc)
 
-    for s in subject :
-        textvalue = s.firstChild.data
-        values.append('Subject: ' + textvalue)
-        break
 
-    for s in number :
-        textvalue = s.firstChild.data
-        values.append('Number: ' + textvalue)
-        break
+    #return render(request, 'polls/syllabus-to-html.xsl',xmldoc)
 
-    for s in title :
-        textvalue = s.firstChild.data
-        values.append('Title: ' + textvalue)
-
-    for s in offered :
-        textvalue = s.firstChild.data
-        values.append('Offered: ' + textvalue)
-
-    for s in scheduleType :
-        textvalue = s.firstChild.data
-        values.append('Schedule Type: ' + textvalue)
-
-    for s in catalogDescription :
-        textvalue = s.firstChild.data
-        values.append('Catalog Description: ' + textvalue)
-
-    for s in prerequisites :
-        values.append('Prerequisites: ')
-        prerequisiteCourse = s.getElementsByTagName('prerequisiteCourse')
-        for p in prerequisiteCourse:
-            prereqvalue = p.getAttribute('minimumGrade')
-            prereqsub = p.getElementsByTagName('subject')
-            prereqnum = p.getElementsByTagName('number')
-            for s in prereqsub:
-                textvalue = s.firstChild.data
-                for n in prereqnum:
-                    numvalue = n.firstChild.data
-                    values.append('Course: '+ textvalue + ' ' + numvalue + ' Minimum Grade: ' + prereqvalue)  
-
-    for s in objectives :
-        objective = s.getElementsByTagName('objective')
-        values.append('Objectives: ')
-        for o in objective :
-            childElem = o.firstChild.data 
-            values.append("Objective: " + childElem)
-
-    for s in outline :
-        topics = s.getElementsByTagName('topic')
-        values.append('Outline: ')
-        for t in topics :
-            childElem = t.firstChild.data
-            values.append('Topic: ' + childElem)
-    fixedName = xmldocname.replace('.xml',"")
-    xmlfile = fixedName.replace('curriculum/syllabi/',"")
-    print('youre in parse')
-    return render(request, 'polls/'+xmlfile+'.html',{'values': values})
-
+def parseSchedule(request, xmldocname):
+    ## This sets the chosen xml file and sets it to the xslt file.
+    xslt_doc = etree.parse("curriculum/schedules/schedule-to-html.xsl")
+    xslt_transformer = etree.XSLT(xslt_doc)
+    source_doc = etree.parse(xmldocname)
+    output_doc = xslt_transformer(source_doc)
+    return HttpResponse(output_doc)
 
 def parseStandardsXml(request, standardsXml):
     xmldoc = minidom.parse(standardsXml)
@@ -157,20 +105,4 @@ def parseStandardsXml(request, standardsXml):
     fixedName = standardsXml.replace('.xml',"")
     xmlfile = fixedName.replace('curriculum/standards/',"")
     return render(request, 'polls/acmcs.html',{'values': values})
-
-#def load_syllabi(request):
-#  return [parseSyllabiXml(request,open('curriculum/syllabi/'+filename)) for filename in #next(walk('curriculum/syllabi'))[2]]
-#
-#def hours_per_semester(request):
-#  # update to use credit hours instead of # of courses
-#  semesters = defaultdict(list)
-#  for xmldoc in load_syllabi(request):
-#    for semester in offered:
-#      semesters[semester].append(course)
-#  ret = []
-#  for semester in semesters:
-#    ret.append((semester, sum(map((lambda course: course.workload_hours), semesters[semester]))))
-#    template = loader.get_template('polls/hours_per_semester.html')
-#    context = {}
-#    return render(request, 'poll/hourspersemester.html',{'ret': ret})
 

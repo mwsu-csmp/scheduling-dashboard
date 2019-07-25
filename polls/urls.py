@@ -1,4 +1,5 @@
 from django.urls import path
+from django.urls import re_path
 
 from . import views
 from . import xmlviews
@@ -10,8 +11,10 @@ urlpatterns = [
     path('', views.index, name='index'),   
     path('acmcs/', xmlviews.parStandards, name='acmcs'),
     path('persemester/', views.persemester, name='persemester'),
+    path('schedule/', xmlviews.parSchedule, name='schedule'),
     path('courselist/', views.courselist, name='courselist'),
     path('courselist/ACT102/', xmlviews.parACT102, name='ACT102'),
+    #re_path(r'^courselist/[A-Z]{3}[0-9]{3}/', xmlviews.parACT102, name='ACT102'),
     path('courselist/ACT211/', xmlviews.parACT211, name='ACT211'),
     path('courselist/ACT301/', xmlviews.parACT301, name='ACT301'),
     path('courselist/ACT302/', xmlviews.parACT302, name='ACT302'),
