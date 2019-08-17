@@ -2,21 +2,14 @@ import xml.dom.minidom as minidom
 import os
 import lxml.html
 from lxml import etree
-from collections import defaultdict
-from xml.dom.minidom import Node
 from django.shortcuts import render
-from django.shortcuts import render_to_response
-from django.http import HttpResponse 
+from django.http import HttpResponse
 from django.template import loader
-
-from .models import say_something, xml_output, hours_per_semester_f
+from .models import xml_output, hours_per_semester_f
 
 def index(request):
-    latest_say_something = say_something.objects.order_by('-pub_date')[:5]
     template = loader.get_template('polls/index.html')
-    context = {
-        'latest_say_something': latest_say_something,
-    }
+    context = {}
     return HttpResponse(template.render(context, request))
 
 def persemester(request):
@@ -42,20 +35,15 @@ def courselist(request):
 
 def parseSyllabiXml(request, xmldocname):
     ## This sets the chosen xml file and sets it to the xslt file.
-    xslt_doc = etree.parse("curriculum/syllabi/syllabus-to-html.xsl")
+    xslt_doc = etree.parse("curriculum/mwsu_curriculum/transformations/syllabus-to-html.xsl")
     xslt_transformer = etree.XSLT(xslt_doc)
- 
     source_doc = etree.parse(xmldocname)
     output_doc = xslt_transformer(source_doc)
-    #print(str(output_doc))
     return HttpResponse(output_doc)
-
-
-    #return render(request, 'polls/syllabus-to-html.xsl',xmldoc)
 
 def parseSchedule(request, xmldocname):
     ## This sets the chosen xml file and sets it to the xslt file.
-    xslt_doc = etree.parse("curriculum/schedules/schedule-to-html.xsl")
+    xslt_doc = etree.parse("curriculum/mwsu_curriculum/transformations/schedule-to-html.xsl")
     xslt_transformer = etree.XSLT(xslt_doc)
     source_doc = etree.parse(xmldocname)
     output_doc = xslt_transformer(source_doc)

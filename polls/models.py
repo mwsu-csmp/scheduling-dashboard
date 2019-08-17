@@ -1,22 +1,12 @@
 from django.db import models
 from django.urls import reverse
-from curriculum.scripts.curriculumlib import *
- 
-class say_something(models.Model):
-    something_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
-
-    def __str__(self):
-        return self.something_text
-
-    def was_published_recently(self):
-        return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+from curriculum.mwsu_curriculum.curriculumlib import *
 
 class hours_per_semester_f(models.Model):
-    hours_per_semester_text = models.TextField(max_length=20000)
+    hours_per_semester_text = hours_per_semester()
      
     def __str__(self):
-        return self.hours_per_semester_text
+        return str(self.hours_per_semester_text)
 
 class xml_output(models.Model):
     output_text = models.TextField(max_length=1000000)
@@ -47,7 +37,7 @@ class MyModelName(models.Model):
 class KnowledgeArea(models.Model):
     """Model representing the Knowledge Area."""
     name = models.CharField(max_length=10, help_text='Enter a Knowledge Area (e.g. AL)')
-    
+
     def __str__(self):
         """String for representing the Model object."""
         return self.name
@@ -55,7 +45,7 @@ class KnowledgeArea(models.Model):
 class Importance(models.Model):
     """Model representing the Knowledge Area."""
     name = models.CharField(max_length=10, help_text='Enter a importance level (e.g. tier1)')
-    
+
     def __str__(self):
         """String for representing the Model object."""
         return self.name
@@ -63,7 +53,7 @@ class Importance(models.Model):
 class Topic(models.Model):
     """Model representing the Topic."""
     name = models.CharField(max_length=200, help_text='Enter a Topic')
-    
+
     importance = models.ManyToManyField(Importance, help_text='Select a importance level')
 
     def __str__(self):
@@ -73,7 +63,7 @@ class Topic(models.Model):
 class Outcome(models.Model):
     """Model representing the Outcome."""
     name = models.CharField(max_length=200, help_text='Enter an Outcome')
-    
+
     importance = models.ManyToManyField(Importance, help_text='Select a importance level')
 
     def __str__(self):
@@ -85,7 +75,7 @@ class SubKnowledgeArea(models.Model):
     name = models.CharField(max_length=6, help_text='Enter a Sub Knowledge Area')
 
     summary = models.TextField(max_length=1000, help_text='Name of Class')
-    
+
     topic = models.ManyToManyField(Topic, help_text='Enter a Topic')
 
     outcome = models.ManyToManyField(Outcome, help_text='Enter an Outcome')
