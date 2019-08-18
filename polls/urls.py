@@ -8,6 +8,6 @@ urlpatterns = [
     path('acmcs/', xmlviews.parStandards, name='acmcs'),
     path('persemester/', views.persemester, name='persemester'),
     path('schedule/', xmlviews.parSchedule, name='schedule'),
-    path('courselist/', views.courselist, name='courselist'),
-    path('courselist/<str:course>/', xmlviews.parCourses),
+    path('courselist/', views.getCourses, name='courselist'),
+    path('courselist/<str:course>/', xmlviews.parCourses, name='course'),
 ]

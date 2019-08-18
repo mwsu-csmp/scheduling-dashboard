@@ -7,11 +7,13 @@ from django.http import HttpResponse
 from django.template import loader
 from .models import xml_output, hours_per_semester_f
 
+#finds and displays the index.html template
 def index(request):
     template = loader.get_template('polls/index.html')
     context = {}
     return HttpResponse(template.render(context, request))
-
+1
+#Gets teh objects from models.py and loads them into a template
 def persemester(request):
     hours_per_semester = hours_per_semester_f.objects.all()
     template = loader.get_template('polls/persemester.html')
@@ -20,18 +22,25 @@ def persemester(request):
     }
     return HttpResponse(template.render(context, request))
 
-def acmcs(request):
-    latest_output = xml_output.objects.all()
-    template = loader.get_template('polls/acmcs.html')
-    context = {
-         'latest_output': latest_output,
-    }
-    return HttpResponse(template.render(context, request))
+#gets the objects from models.py and loads them into a template
+#def acmcs(request):
+#    latest_output = xml_output.objects.all()
+#    template = loader.get_template('polls/acmcs.html')
+#    context = {
+#         'latest_output': latest_output,
+#    }
+#    return HttpResponse(template.render(context, request))
 
-def courselist(request):
-    template = loader.get_template('polls/courselist.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
+#This goes through the syllabi folder and finds all of the courses and puts them in an array.
+def getCourses(request):
+    path = 'curriculum/mwsu_curriculum/syllabi/'
+    values = []
+    for filename in os.listdir(path):
+     if not filename.endswith('.xml'): continue
+     correction = filename.replace('.xml','')
+     values.append(correction)
+     values.sort()
+    return render(request, 'polls/courselist.html', {'values': values})
 
 def parseSyllabiXml(request, xmldocname):
     ## This sets the chosen xml file and sets it to the xslt file.
@@ -49,6 +58,8 @@ def parseSchedule(request, xmldocname):
     output_doc = xslt_transformer(source_doc)
     return HttpResponse(output_doc)
 
+#Parse and pull all data from the acm-cs.xml file and returns all info within an array.
+#this is used because of no xsl for this xml file
 def parseStandardsXml(request, standardsXml):
     xmldoc = minidom.parse(standardsXml)
     name = xmldoc.getElementsByTagName('name')
@@ -90,7 +101,5 @@ def parseStandardsXml(request, standardsXml):
                 impvalue = s.getAttribute('importance')
                 values.append('outcome importance: ' + impvalue + ': ' + textvalue)
 
-    fixedName = standardsXml.replace('.xml',"")
-    xmlfile = fixedName.replace('curriculum/standards/',"")
     return render(request, 'polls/acmcs.html',{'values': values})
 

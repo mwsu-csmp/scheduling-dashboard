@@ -4,47 +4,9 @@
    {% endblock %}
      {% block content %}
         <h1> Course List </h1>
-	<ul>
-          <li><b><a href="{% url 'ACT102' %}">ACT102</a></b></li>
-          <li><b><a href="{% url 'ACT211' %}">ACT211</a></b></li>
-          <li><b><a href="{% url 'ACT301' %}">ACT301</a></b></li>
-          <li><b><a href="{% url 'ACT302' %}">ACT302</a></b></li>
-          <li><b><a href="{% url 'ACT311' %}">ACT311</a></b></li>
-          <li><b><a href="{% url 'ACT324' %}">ACT324</a></b></li>
-          <li><b><a href="{% url 'ACT405' %}">ACT405</a></b></li>
-          <li><b><a href="{% url 'ACT476' %}">ACT476</a></b></li>
-          <li><b><a href="{% url 'CSC184' %}">CSC184</a></b></li>
-          <li><b><a href="{% url 'CSC201' %}">CSC201</a></b></li>
-          <li><b><a href="{% url 'CSC208' %}">CSC208</a></b></li>
-          <li><b><a href="{% url 'CSC245' %}">CSC245</a></b></li>
-          <li><b><a href="{% url 'CSC246' %}">CSC246</a></b></li>
-          <li><b><a href="{% url 'CSC254' %}">CSC254</a></b></li>
-          <li><b><a href="{% url 'CSC264' %}">CSC264</a></b></li>
-          <li><b><a href="{% url 'CSC274' %}">CSC274</a></b></li>
-          <li><b><a href="{% url 'CSC285' %}">CSC285</a></b></li>
-          <li><b><a href="{% url 'CSC289' %}">CSC289</a></b></li>
-          <li><b><a href="{% url 'CSC294' %}">CSC294</a></b></li>
-          <li><b><a href="{% url 'CSC305' %}">CSC305</a></b></li>
-          <li><b><a href="{% url 'CSC328' %}">CSC328</a></b></li>
-          <li><b><a href="{% url 'CSC345' %}">CSC345</a></b></li>
-          <li><b><a href="{% url 'CSC346' %}">CSC346</a></b></li>
-          <li><b><a href="{% url 'CSC386' %}">CSC386</a></b></li>
-          <li><b><a href="{% url 'CSC400' %}">CSC400</a></b></li>
-          <li><b><a href="{% url 'CSC406' %}">CSC406</a></b></li>
-          <li><b><a href="{% url 'CSC410' %}">CSC410</a></b></li>
-          <li><b><a href="{% url 'CSC445' %}">CSC445</a></b></li>
-          <li><b><a href="{% url 'CSC450' %}">CSC450</a></b></li>
-          <li><b><a href="{% url 'CSC451' %}">CSC451</a></b></li>
-          <li><b><a href="{% url 'CSC484' %}">CSC484</a></b></li>
-          <li><b><a href="{% url 'CSC550' %}">CSC550</a></b></li>
-          <li><b><a href="{% url 'CSC570' %}">CSC570</a></b></li>
-          <li><b><a href="{% url 'CSC580' %}">CSC580</a></b></li>
-          <li><b><a href="{% url 'CSC590' %}">CSC590</a></b></li>
-          <li><b><a href="{% url 'CSC615' %}">CSC615</a></b></li>
-          <li><b><a href="{% url 'CSC625' %}">CSC625</a></b></li>
-          <li><b><a href="{% url 'CSC630' %}">CSC630</a></b></li>
-          <li><b><a href="{% url 'CSC635' %}">CSC635</a></b></li>
-          <li><b><a href="{% url 'CSC650' %}">CSC650</a></b></li>
-          <li><b><a href="{% url 'CSC660' %}">CSC660</a></b></li>
+        <ul>
+        {% for value in values %}
+            <li><b><a href={% url 'course' value %}>{{ value }} </a></b></li>
+        {% endfor %}
         </ul>
      {% endblock %}
