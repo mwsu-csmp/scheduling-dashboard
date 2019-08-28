@@ -4,7 +4,112 @@
    {% endblock %}
      {% block content %}
         <h1> Offered Per Semester </h1>
-	      {% for value in hours_per_semester %}
-	         <p>{{ value }} </p>
-	      {% endfor %}
+           {% for values in hours_per_semester %}
+	         <p>{{ values }} </p>
+           {% endfor %}
+        <h1>Offered Per Season</h1>
+            <table class="table" align="left">
+              <tr>
+                <th>Fall</th>
+              </tr>
+              {% for s in courses %}
+                {% if "'fall'" in s.offered %}
+              <tr>
+                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{ s.workloadhours }}</td>
+              </tr>
+                {% endif %}
+            {% endfor %}
+            </table>
+            <table class="table" align="left">
+              <tr>
+                <th>Fall-Odd</th>
+              </tr>
+              {% for s in courses %}
+                {% if "'fall-odd'" in s.offered %}
+              <tr>
+                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{ s.workloadhours }}</td>
+              </tr>
+                {% endif %}
+            {% endfor %}
+            </table>
+            <table class="table" align="left">
+              <tr>
+                <th>Fall-Even</th>
+              </tr>
+              {% for s in courses %}
+                {% if "'fall-even'" in s.offered  %}
+              <tr>
+                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{ s.workloadhours }}</td>
+              </tr>
+                {% endif %}
+            {% endfor %}
+            </table>
+            <table class="table" align="left">
+              <tr>
+                <th>Spring</th>
+              </tr>
+              {% for s in courses %}
+                {% if "'spring'" in s.offered  %}
+              <tr>
+                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{ s.workloadhours }}</td>
+              </tr>
+                {% endif %}
+            {% endfor %}
+            </table>
+            <table class="table" align="left">
+              <tr>
+                <th>Spring-Odd</th>
+              </tr>
+              {% for s in courses %}
+                {% if "'spring-odd'" in s.offered  %}
+              <tr>
+                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{ s.workloadhours }}</td>
+              </tr>
+                {% endif %}
+            {% endfor %}
+            </table>
+            <table class="table" align="left">
+              <tr>
+                <th>Spring-Even</th>
+              </tr>
+              {% for s in courses %}
+                {% if "'spring-even'" in s.offered  %}
+              <tr>
+                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{ s.workloadhours }}</td>
+              </tr>
+                {% endif %}
+            {% endfor %}
+            </table>
+            <table class="table" align="left">
+              <tr>
+                <th>Discretion</th>
+              </tr>
+              {% for s in courses %}
+                {% if "'discretion'" in s.offered  %}
+              <tr>
+                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{ s.workloadhours }}</td>
+              </tr>
+                {% endif %}
+            {% endfor %}
+            </table>
+            <table class="table" align="left">
+              <tr>
+                <th>Summer</th>
+              </tr>
+              {% for s in courses %}
+                {% if "'summer'" in s.offered  %}
+              <tr>
+                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{ s.workloadhours }}</td>
+              </tr>
+                {% endif %}
+            {% endfor %}
+            </table>
      {% endblock %}

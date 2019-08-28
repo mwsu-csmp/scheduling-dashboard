@@ -21,6 +21,6 @@ urlpatterns = [
     path('persemester/',include('polls.urls')),
     path('courselist/', include('polls.urls')),
     path('acmcs/', include('polls.urls')),
-    path('index/', include('polls.urls')),
-    path('admin/', admin.site.urls),   
+    path('', include('polls.urls')),
+    path('admin/', admin.site.urls),
 ]

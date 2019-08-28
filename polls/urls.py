@@ -2,6 +2,7 @@ from django.urls import path
 
 from . import views
 from . import xmlviews
+from . import models
 
 urlpatterns = [
     path('index/', views.index, name='index'),

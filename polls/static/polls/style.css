@@ -19,3 +19,7 @@ div.header {
   color: white;
   font-size: 30px;
 }
+
+ table.table {
+  empty-cells: hide;
+}
