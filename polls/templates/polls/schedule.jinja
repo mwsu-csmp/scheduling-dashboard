@@ -1,0 +1,38 @@
+{% extends "polls/base.jinja" %}
+   {% block title %}
+     <title>Course List</title>
+   {% endblock %}
+     {% block content %}
+
+     <h1> Schedule </h1>
+
+
+    <table class="table" border="1">
+      <tr bgcolor="#9acd32">
+          <th>Instructor</th>
+          <th>Course</th>
+          <th>Section Number</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Days</th>
+          <th>Building</th>
+          <th>Max</th>
+      </tr>
+        {% for courses in schedule %}
+                <tr>
+                    <td>{{ courses.course }}</td>
+                    <td>{{ courses.section_number }}</td>
+                    <td>{{ courses.start_time }}</td>
+                    <td>{{ courses.end_time }}</td>
+                    <td>
+                    {% for days in courses.day %}
+                        {{ days }}
+                     {% endfor %}
+                    </td>
+                    <td>{{ courses.building_room }}</td>
+                    <td>{{ courses.max }}</td>
+                    <td>{{ courses.instructor }}</td>
+                </tr>
+        {% endfor %}
+    </table>
+     {% endblock %}

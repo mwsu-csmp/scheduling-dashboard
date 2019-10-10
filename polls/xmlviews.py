@@ -1,5 +1,5 @@
 import os
-from polls.views import parseStandardsXml, parseSchedule, parseSyllabiXmlHTML
+from polls.views import parseStandardsXml, scheduleHtml, syllabiXmlHTML, scheduleTeachingAssignmentHtml
 
 ##All of these def's return a HttpResponse. They are not sent to a template
 
@@ -18,7 +18,17 @@ def parSchedule(request):
     for filename in os.listdir(path):
      if not filename.endswith('schedule.xml'): continue
      fullname = os.path.join(path, filename)
-     xml = parseSchedule(request, fullname)
+     print(fullname)
+     xml = scheduleHtml(request)
+    return xml
+
+def parTeachingAssignment(request):
+    path = 'curriculum/mwsu_curriculum/schedules/'
+    for filename in os.listdir(path):
+     if not filename.endswith('schedule.xml'): continue
+     fullname = os.path.join(path, filename)
+     print(fullname)
+     xml = scheduleTeachingAssignmentHtml(request)
     return xml
 
 #finds the requested course xml file. Called from urls.py
@@ -28,6 +38,6 @@ def parCourses(request, course):
      if not filename.endswith(course + '.xml'): continue
      fullname = os.path.join(path, filename)
      print("giving this one " + filename)
-     xml = parseSyllabiXmlHTML(request, fullname)
+     xml = syllabiXmlHTML(request, fullname)
     return xml
 

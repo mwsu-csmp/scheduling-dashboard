@@ -1,11 +1,16 @@
 li a {
-    color: green;
+    color: black;
 }
 
 .sidebar-nav {
     margin-top: 20px;
     padding: 0;
     list-style: none;
+}
+
+img.logo {
+    padding-top: 30px;
+    float: left;
 }
 
 div.a {
@@ -15,11 +20,11 @@ div.a {
 div.header {
   padding: 1px;
   text-align: center;
-  background: #1abc9c;
-  color: white;
+  background: #ffc700;
   font-size: 30px;
 }
 
  table.table {
-  empty-cells: hide;
+  empty-cells: show;
+  float: left;
 }

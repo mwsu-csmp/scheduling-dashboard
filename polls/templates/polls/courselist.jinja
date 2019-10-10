@@ -1,12 +1,12 @@
-{% extends "polls/base.html" %}
+{%  extends "polls/base.jinja" %}
    {% block title %}
      <title>Course List</title>
    {% endblock %}
      {% block content %}
         <h1> Course List </h1>
         <ul>
-        {% for value in values %}
-            <li><b><a href={% url 'course' value %}>{{ value }} </a></b></li>
+        {% for course in courses %}
+            <li><b><a href={{ course.course }}>{{ course.course }}</a>{{ " " }}{{ course.title }}</b></li>
         {% endfor %}
         </ul>
      {% endblock %}

@@ -1,4 +1,4 @@
-{% extends "polls/base.html" %}
+{% extends "polls/base.jinja" %}
    {% block title %}
      <title>Offered Per Semester</title>
    {% endblock %}
@@ -13,22 +13,22 @@
                 <th>Fall</th>
               </tr>
               {% for s in courses %}
-                {% if "'fall'" in s.offered %}
+                {% if "fall" in s.offered %}
               <tr>
-                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{s.course}}</td>
                   <td>{{ s.workloadhours }}</td>
               </tr>
                 {% endif %}
-            {% endfor %}
+              {% endfor %}
             </table>
             <table class="table" align="left">
               <tr>
                 <th>Fall-Odd</th>
               </tr>
               {% for s in courses %}
-                {% if "'fall-odd'" in s.offered %}
+                {% if "fall-odd" in s.offered %}
               <tr>
-                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{s.course}}</td>
                   <td>{{ s.workloadhours }}</td>
               </tr>
                 {% endif %}
@@ -39,9 +39,9 @@
                 <th>Fall-Even</th>
               </tr>
               {% for s in courses %}
-                {% if "'fall-even'" in s.offered  %}
+                {% if "fall-even" in s.offered  %}
               <tr>
-                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{s.course}}</td>
                   <td>{{ s.workloadhours }}</td>
               </tr>
                 {% endif %}
@@ -52,9 +52,9 @@
                 <th>Spring</th>
               </tr>
               {% for s in courses %}
-                {% if "'spring'" in s.offered  %}
+                {% if "spring" in s.offered  %}
               <tr>
-                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{s.course}}</td>
                   <td>{{ s.workloadhours }}</td>
               </tr>
                 {% endif %}
@@ -65,9 +65,9 @@
                 <th>Spring-Odd</th>
               </tr>
               {% for s in courses %}
-                {% if "'spring-odd'" in s.offered  %}
+                {% if "spring-odd" in s.offered  %}
               <tr>
-                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{s.course}}</td>
                   <td>{{ s.workloadhours }}</td>
               </tr>
                 {% endif %}
@@ -78,9 +78,9 @@
                 <th>Spring-Even</th>
               </tr>
               {% for s in courses %}
-                {% if "'spring-even'" in s.offered  %}
+                {% if "spring-even" in s.offered  %}
               <tr>
-                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{s.course}}</td>
                   <td>{{ s.workloadhours }}</td>
               </tr>
                 {% endif %}
@@ -91,9 +91,9 @@
                 <th>Discretion</th>
               </tr>
               {% for s in courses %}
-                {% if "'discretion'" in s.offered  %}
+                {% if "discretion" in s.offered  %}
               <tr>
-                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{s.course}}</td>
                   <td>{{ s.workloadhours }}</td>
               </tr>
                 {% endif %}
@@ -104,9 +104,9 @@
                 <th>Summer</th>
               </tr>
               {% for s in courses %}
-                {% if "'summer'" in s.offered  %}
+                {% if "summer" in s.offered  %}
               <tr>
-                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{s.course}}</td>
                   <td>{{ s.workloadhours }}</td>
               </tr>
                 {% endif %}

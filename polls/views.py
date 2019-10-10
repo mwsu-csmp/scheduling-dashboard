@@ -1,77 +1,81 @@
 import xml.dom.minidom as minidom
-import os
-import lxml.html
+
+import jinja2
 from lxml import etree
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
-from collections import defaultdict
-from .models import courses_per_semester_f, hours_per_semester_f, courses_f
+from .models import *
+from curriculum.mwsu_curriculum.curriculumlib import *
+from jinja2 import Environment, FileSystemLoader
+
+file_loader = FileSystemLoader('polls/templates/polls')
 
 
-# finds and displays the index.html template
+# finds and displays the index.jinja template
 def index(request):
-    template = loader.get_template('polls/index.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
+    return render(request, "polls/index.jinja")
 
 
 # Gets teh objects from models.py and loads them into a template
 def persemester(request):
     hours_per_semester = hours_per_semester_f.objects.all()
-    courses = courses_f.objects.all()
-    courseload = courses_f.workloadhours
-    for s in courses_f.objects.all():
-        print(s.workloadhours)
-    template = loader.get_template('polls/persemester.html')
-    context = {
-        'hours_per_semester': hours_per_semester,
-        'courses': courses,
-    }
-    return HttpResponse(template.render(context, request))
+    courses = getCourses()
+    return render(request, "polls/persemester.jinja",
+                  {'courses': courses, 'hours_per_semester': hours_per_semester})
 
 
-# gets the objects from models.py and loads them into a template
-# def acmcs(request):
-#    latest_output = xml_output.objects.all()
-#    template = loader.get_template('polls/acmcs.html')
-#    context = {{% endfor %}
-#         'latest_output': latest_output,
-#    }
-#    return HttpResponse(template.render(context, request))
-
-# This goes through the syllabi folder and finds all of the courses and puts them in an array.
-def getCourses(request):
-    path = 'curriculum/mwsu_curriculum/syllabi/'
-    values = []
-    for filename in os.listdir(path):
-        if not filename.endswith('.xml'): continue
-        correction = filename.replace('.xml', '')
-        values.append(correction)
-        values.sort()
-    return render(request, 'polls/courselist.html', {'values': values})
+def coursesHtml(request):
+    getCourses().sort(key=lambda x: x.course, reverse=False)
+    courses = sorted(getCourses(), key=lambda x: x.course, reverse=False)
+    return render(request, 'polls/courselist.jinja', {'courses': courses})
 
 
-def parseSyllabiXmlHTML(request, xmldocname):
-    ## This sets the chosen xml file finds it in the database and sets it to the xslt file.
-    courses = courses_f.objects.all()
+def syllabiXmlHTML(request, xmldocname):
+    """ This sets the chosen xml file finds it in the database and sets it to the xslt file."""
+    courses = getCourses()
     xslt_doc = etree.parse("curriculum/mwsu_curriculum/transformations/syllabus-to-html.xsl")
     xslt_transformer = etree.XSLT(xslt_doc)
     for course in courses:
-        name = 'curriculum/mwsu_curriculum/syllabi/' + course.subject + course.number + '.xml'
+        name = 'curriculum/mwsu_curriculum/syllabi/' + course.course + '.xml'
         if name == xmldocname:
             source_doc = etree.parse(xmldocname)
             output_doc = xslt_transformer(source_doc)
             return HttpResponse(output_doc)
 
 
-def parseSchedule(request, xmldocname):
-    ## This sets the chosen xml file and sets it to the xslt file.
-    xslt_doc = etree.parse("curriculum/mwsu_curriculum/transformations/schedule-to-html.xsl")
-    xslt_transformer = etree.XSLT(xslt_doc)
-    source_doc = etree.parse(xmldocname)
-    output_doc = xslt_transformer(source_doc)
-    return HttpResponse(output_doc)
+def getCourses():
+    # courses_f.objects.all().delete()
+    courses = list()
+    for s in load_courses():
+        course = courses_f(course=s.subject + s.number, title=s.title, scheduleType=s.scheduleType, offered=s.offered,
+                           workloadhours=s.workload_hours, catalogDescription=s.catalogDescription,
+                           prerequisites=s.prerequisites, objective=s.objective, topic=s.topic)
+        courses.append(course)
+    return courses
+
+
+def getSchedule():
+    scheduleList = list()
+    for s in load_schedule():
+        for i in s:
+            schedule = schedule_f(course=i[0], section_number=i[1], start_time=i[2],
+                                  end_time=i[3], day=i[7], building_room=i[4], max=i[5],
+                               instructor=i[6])
+            scheduleList.append(schedule)
+    return scheduleList
+
+def scheduleHtml(request):
+    getSchedule().sort(key=lambda x: x.course, reverse=False)
+    schedule = sorted(getSchedule(), key=lambda x: x.course, reverse=False)
+    return render(request, "polls/schedule.jinja",{'schedule': schedule})
+
+
+def scheduleTeachingAssignmentHtml(request):
+    """ This sets the chosen xml file and sets it to the xslt file. """
+    getSchedule().sort(key=lambda x: x.instructor, reverse=False)
+    assignment = sorted(getSchedule(), key=lambda x: x.instructor, reverse=False)
+    return render(request, "polls/teaching_assignments.jinja", {'assignment': assignment})
 
 
 # Parse and pull all data from the acm-cs.xml file and returns all info within an array.
@@ -117,4 +121,4 @@ def parseStandardsXml(request, standardsXml):
                 impvalue = s.getAttribute('importance')
                 values.append('outcome importance: ' + impvalue + ': ' + textvalue)
 
-    return render(request, 'polls/acmcs.html', {'values': values})
+    return render(request, 'polls/acmcs.jinja', {'values': values})
