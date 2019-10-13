@@ -61,15 +61,36 @@ def getSchedule():
         for i in s:
             schedule = schedule_f(course=i[0], section_number=i[1], start_time=i[2],
                                   end_time=i[3], day=i[7], building_room=i[4], max=i[5],
-                               instructor=i[6])
+                                  instructor=i[6])
             scheduleList.append(schedule)
     return scheduleList
+
+
+def schedulelistHtml(request):
+    schedulelist = list()
+    path = 'curriculum/mwsu_curriculum/schedules/'
+    for filename in os.listdir(path):
+        if not filename.endswith('.xml'): continue
+        newfilename = filename.replace('.xml', "")
+        schedulelist.append(newfilename)
+    schedules = schedulelist
+    return render(request, "polls/schedulelist.jinja", {'schedules': schedules})
+
 
 def scheduleHtml(request):
     getSchedule().sort(key=lambda x: x.course, reverse=False)
     schedule = sorted(getSchedule(), key=lambda x: x.course, reverse=False)
-    return render(request, "polls/schedule.jinja",{'schedule': schedule})
+    return render(request, "polls/schedule.jinja", {'schedule': schedule})
 
+def assignmentlistHtml(request):
+    schedulelist = list()
+    path = 'curriculum/mwsu_curriculum/schedules/'
+    for filename in os.listdir(path):
+        if not filename.endswith('.xml'): continue
+        newfilename = filename.replace('.xml', "")
+        schedulelist.append(newfilename)
+    schedules = schedulelist
+    return render(request, "polls/assignmentlist.jinja", {'schedules': schedules})
 
 def scheduleTeachingAssignmentHtml(request):
     """ This sets the chosen xml file and sets it to the xslt file. """
