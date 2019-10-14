@@ -66,6 +66,14 @@ def getSchedule():
     return scheduleList
 
 
+def getAssignments():
+    assignmentlist = list()
+    for s in load_assignments():
+        assignment = assignments(instructor=s[0], workloadhours=s[1])
+        assignmentlist.append(assignment)
+    return assignmentlist
+
+
 def schedulelistHtml(request):
     schedulelist = list()
     path = 'curriculum/mwsu_curriculum/schedules/'
@@ -82,6 +90,7 @@ def scheduleHtml(request):
     schedule = sorted(getSchedule(), key=lambda x: x.course, reverse=False)
     return render(request, "polls/schedule.jinja", {'schedule': schedule})
 
+
 def assignmentlistHtml(request):
     schedulelist = list()
     path = 'curriculum/mwsu_curriculum/schedules/'
@@ -92,11 +101,32 @@ def assignmentlistHtml(request):
     schedules = schedulelist
     return render(request, "polls/assignmentlist.jinja", {'schedules': schedules})
 
+
 def scheduleTeachingAssignmentHtml(request):
     """ This sets the chosen xml file and sets it to the xslt file. """
     getSchedule().sort(key=lambda x: x.instructor, reverse=False)
     assignment = sorted(getSchedule(), key=lambda x: x.instructor, reverse=False)
-    return render(request, "polls/teaching_assignments.jinja", {'assignment': assignment})
+    additional_assignments = getAssignments()
+    for instructor in additional_assignments:
+        print(instructor.instructor)
+    courses = getCourses()
+    assignemnt_hours = list()
+    total = 0
+    final_total = 0
+    currentinstructor = ""
+    for instructor in assignment:
+        if currentinstructor != instructor.instructor:
+            final_total = total
+            total = 0
+            assignemnt_hours.append(final_total)
+        for course in courses:
+            currentinstructor = instructor.instructor
+            if instructor.course == course.course:
+                total = total + course.workloadhours
+    assignemnt_hours.append(final_total)
+    return render(request, "polls/teaching_assignments.jinja", {'assignment': assignment, 'courses': courses,
+                                                                'assignment_hours': assignemnt_hours,
+                                                                'additional_assignments': additional_assignments})
 
 
 # Parse and pull all data from the acm-cs.xml file and returns all info within an array.

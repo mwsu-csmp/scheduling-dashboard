@@ -24,7 +24,18 @@ div.header {
   font-size: 30px;
 }
 
+table, td, th {
+  border: 1px solid black;
+}
+
  table.table {
   empty-cells: show;
+  border-collapse: collapse;
   float: left;
+}
+
+ table.AssignmentTable {
+  empty-cells: show;
+  border-collapse: collapse;
+  float: bottom;
 }

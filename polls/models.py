@@ -44,6 +44,11 @@ class schedule_f(object):
         self.max = max
         self.instructor = instructor
 
+class assignments(object):
+
+    def __init__(self, instructor, workloadhours):
+        self.instructor = instructor
+        self.workloadhours = workloadhours
 
 class KnowledgeArea(models.Model):
     """Model representing the Knowledge Area."""

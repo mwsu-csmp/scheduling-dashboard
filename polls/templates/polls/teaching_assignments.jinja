@@ -4,10 +4,10 @@
    {% endblock %}
      {% block content %}
 
-     <h1> Schedule </h1>
+     <h1> Assignments </h1>
 
 
-     <table class="table" border="1">
+     <table class="table" style="margin-bottom: 30px" border="1">
       <tr bgcolor="#9acd32">
           <th>Instructor</th>
           <th>Course</th>
@@ -36,5 +36,45 @@
         {% endfor %}
     </table>
 
+    <div style="clear:both;"></div>
+   <h2>Hours</h2>
+
+    <table class="AssignmentTable" style="margin-bottom: 30px" align="left">
+      <tr bgcolor="#9acd32">
+          <th>Instructor</th>
+      </tr>
+         {% for instructor in assignment | unique(attribute='instructor') %}
+             <tr>
+                <td>{{ instructor.instructor }}</td>
+             </tr>
+         {% endfor %}
+    </table>
+    {% set total = 0 %}
+    <table class="AssignmentTable" style="margin-bottom: 30px" align="left">
+      <tr bgcolor="#9acd32">
+          <th>Workload Hours</th>
+      </tr>
+        {% for hours in assignment_hours[1:] %}
+             <tr>
+                 <td>{{ hours }}</td>
+             </tr>
+        {% endfor %}
+    </table>
+
+   <div style="clear:both;"></div>
+   <h2>Additional Assignments</h2>
+
+    <table class="AssignmentTable" style="margin-bottom: 30px" align="left">
+      <tr bgcolor="#9acd32">
+          <th>Instructor</th>
+          <th>Hours</th>
+      </tr>
+         {% for instructor in additional_assignments %}
+             <tr>
+                <td>{{ instructor.instructor }}</td>
+                <td>{{ instructor.workloadhours }}</td>
+             </tr>
+         {% endfor %}
+    </table>
 
      {% endblock %}
