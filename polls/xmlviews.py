@@ -5,8 +5,8 @@ from polls.views import parseStandardsXml, scheduleHtml, schedulelistHtml, sylla
 
 ##All of these def's return a HttpResponse. They are not sent to a template
 
-# finds acm-cs.xml file. Called from urls.py
 def parStandards(request):
+    """ finds and parses the acm-cs.xml file. Called from urls.py. """
     path = 'curriculum/mwsu_curriculum/standards/'
     for filename in os.listdir(path):
         if not filename.endswith('acm-cs.xml'): continue
@@ -15,8 +15,8 @@ def parStandards(request):
     return xml
 
 
-# finds mwsu-cs-schedule-sp19.xml file. Called from urls.py
 def parSchedule(request, schedule):
+    """ finds and parses schedule xml file. Called from urls.py """
     path = 'curriculum/mwsu_curriculum/schedules/'
     for filename in os.listdir(path):
         if not filename.endswith(schedule + '.xml'): continue
@@ -27,6 +27,7 @@ def parSchedule(request, schedule):
 
 
 def parTeachingAssignment(request, schedule):
+    """ finds and parses assignment xml file. Called from urls.py """
     path = 'curriculum/mwsu_curriculum/schedules/'
     for filename in os.listdir(path):
         if not filename.endswith(schedule + '.xml'): continue
@@ -38,6 +39,7 @@ def parTeachingAssignment(request, schedule):
 
 # finds the requested course xml file. Called from urls.py
 def parCourses(request, course):
+    """ finds and parses the selected course xml file. Called from urls.py """
     path = 'curriculum/mwsu_curriculum/syllabi/'
     for filename in os.listdir(path):
         if not filename.endswith(course + '.xml'): continue

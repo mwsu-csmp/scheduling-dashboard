@@ -1,8 +1,11 @@
 from django.db import models
 from curriculum.mwsu_curriculum.curriculumlib import *
 
+"""Python uses a MVC (Models - Views - Controller) system. Django adopts this and makes a small change. 
+Instead django uses a MVT (Model - Views - Template) system. Models sets up the information """
 
 class hours_per_semester_f(models.Model):
+    """ creates a model for hours-per-semester """
     hours_per_semester_text = hours_per_semester()
 
     def __str__(self):
@@ -10,6 +13,7 @@ class hours_per_semester_f(models.Model):
 
 
 class courses_per_semester_f(models.Model):
+    """ creates a model for courses-per-semester """
     courses_per_semester_text = courses_per_semester()
 
     def __str__(self):
@@ -17,7 +21,7 @@ class courses_per_semester_f(models.Model):
 
 
 class courses_f(object):
-
+    """ creates a model for each individual course. This is the class that holds each courses information """
     def __init__(self, course, title, offered, scheduleType, workloadhours,
                  catalogDescription, prerequisites, objective, topic):
         self.course = course
@@ -32,7 +36,7 @@ class courses_f(object):
 
 
 class schedule_f(object):
-
+    """ creates a model for each individual schedule. This is the class that holds each schedules information """
     def __init__(self, course, section_number, start_time, end_time, day,
                  building_room, max, instructor):
         self.course = course
@@ -45,7 +49,7 @@ class schedule_f(object):
         self.instructor = instructor
 
 class assignments(object):
-
+    """ creates a model for each individual assignment. This is the class that holds each assignment information """
     def __init__(self, instructor, workloadhours):
         self.instructor = instructor
         self.workloadhours = workloadhours

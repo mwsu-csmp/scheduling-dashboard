@@ -12,13 +12,13 @@ from jinja2 import Environment, FileSystemLoader
 file_loader = FileSystemLoader('polls/templates/polls')
 
 
-# finds and displays the index.jinja template
 def index(request):
+    """ finds and displays the index.jinja template """
     return render(request, "polls/index.jinja")
 
 
-# Gets teh objects from models.py and loads them into a template
 def persemester(request):
+    """ Gets the objects from models.py and loads them into a template """
     hours_per_semester = hours_per_semester_f.objects.all()
     courses = getCourses()
     return render(request, "polls/persemester.jinja",
@@ -26,6 +26,8 @@ def persemester(request):
 
 
 def coursesHtml(request):
+    """ This gets the request(Name of the Course) and goes through the list of courses, and deploys the corresponding
+     Template """
     getCourses().sort(key=lambda x: x.course, reverse=False)
     courses = sorted(getCourses(), key=lambda x: x.course, reverse=False)
     return render(request, 'polls/courselist.jinja', {'courses': courses})
@@ -33,6 +35,7 @@ def coursesHtml(request):
 
 def syllabiXmlHTML(request, xmldocname):
     """ This sets the chosen xml file finds it in the database and sets it to the xslt file."""
+    """ SPECIAL NOTE: All syllabi do not a template. They ALL display using XSLT """
     courses = getCourses()
     xslt_doc = etree.parse("curriculum/mwsu_curriculum/transformations/syllabus-to-html.xsl")
     xslt_transformer = etree.XSLT(xslt_doc)
@@ -45,7 +48,7 @@ def syllabiXmlHTML(request, xmldocname):
 
 
 def getCourses():
-    # courses_f.objects.all().delete()
+    """ Creates a list of all course objects """
     courses = list()
     for s in load_courses():
         course = courses_f(course=s.subject + s.number, title=s.title, scheduleType=s.scheduleType, offered=s.offered,
@@ -56,6 +59,7 @@ def getCourses():
 
 
 def getSchedule():
+    """ Creates a list of all Schedule objects """
     scheduleList = list()
     for s in load_schedule():
         for i in s:
@@ -67,6 +71,7 @@ def getSchedule():
 
 
 def getAssignments():
+    """ Creates a list of all Assignment objects """
     assignmentlist = list()
     for s in load_assignments():
         assignment = assignments(instructor=s[0], workloadhours=s[1])
@@ -75,6 +80,8 @@ def getAssignments():
 
 
 def schedulelistHtml(request):
+    """ This goes through and grabs all of the schedules in the schedule folder and adds them to the list that
+     will be displayed inside of the Template """
     schedulelist = list()
     path = 'curriculum/mwsu_curriculum/schedules/'
     for filename in os.listdir(path):
@@ -86,12 +93,16 @@ def schedulelistHtml(request):
 
 
 def scheduleHtml(request):
+    """ This gets the request and goes through the list of schedules, and deploys the corresponding
+         Template """
     getSchedule().sort(key=lambda x: x.course, reverse=False)
     schedule = sorted(getSchedule(), key=lambda x: x.course, reverse=False)
     return render(request, "polls/schedule.jinja", {'schedule': schedule})
 
 
 def assignmentlistHtml(request):
+    """ This gets the request and goes through the list of assignments, and deploys the corresponding
+         Template """
     schedulelist = list()
     path = 'curriculum/mwsu_curriculum/schedules/'
     for filename in os.listdir(path):
@@ -132,6 +143,7 @@ def scheduleTeachingAssignmentHtml(request):
 # Parse and pull all data from the acm-cs.xml file and returns all info within an array.
 # this is used because of no xsl for this xml file
 def parseStandardsXml(request, standardsXml):
+    """ parses Standards then sets the information inside of the file to a list, this list is passed to the Template """
     xmldoc = minidom.parse(standardsXml)
     name = xmldoc.getElementsByTagName('name')
     body = xmldoc.getElementsByTagName('body')
