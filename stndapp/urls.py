@@ -1,26 +1,18 @@
-"""stndapp URL Configuration
+from django.urls import path
+from . import views
+from . import xmlviews
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/2.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-from django.contrib import admin
-from django.urls import include, path
-
+""" This holds the url patterns for each of the pages """
+""" alot of the pages are using regex to find each selected course passed in through the url """
 
 urlpatterns = [
-    #path('persemester/',include('polls.urls')),
-    #path('courselist/', include('polls.urls')),
-    #path('acmcs/', include('polls.urls')),
-    path('', include('polls.urls')),
-    path('admin/', admin.site.urls),
+    path('', views.index, name=''),
+    path('acmcs/', xmlviews.parStandards, name='acmcs'),
+    path('persemester/', views.persemester, name='persemester'),
+    path('schedulelist/<str:schedule>/', xmlviews.parSchedule, name='schedule'),
+    path('schedulelist/', views.schedulelistHtml, name='schedulelist'),
+    path('assignmentlist/<str:schedule>/', xmlviews.parTeachingAssignment, name='assignment'),
+    path('assignmentlist/', views.assignmentlistHtml, name='assignmentlist'),
+    path('courselist/', views.coursesHtml, name='courselist'),
+    path('courselist/<str:course>/', xmlviews.parCourses, name='course'),
 ]

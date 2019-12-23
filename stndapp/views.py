@@ -9,19 +9,19 @@ from .models import *
 from mwsu_curriculum.curriculumlib import *
 from jinja2 import Environment, FileSystemLoader
 
-file_loader = FileSystemLoader('polls/templates/polls')
+file_loader = FileSystemLoader('templates')
 
 
 def index(request):
     """ finds and displays the index.jinja template """
-    return render(request, "polls/index.jinja")
+    return render(request, "index.jinja")
 
 
 def persemester(request):
     """ Gets the objects from models.py and loads them into a template """
     hours_per_semester = hours_per_semester_f.objects.all()
     courses = getCourses()
-    return render(request, "polls/persemester.jinja",
+    return render(request, "persemester.jinja",
                   {'courses': courses, 'hours_per_semester': hours_per_semester})
 
 
@@ -30,7 +30,7 @@ def coursesHtml(request):
      Template """
     getCourses().sort(key=lambda x: x.course, reverse=False)
     courses = sorted(getCourses(), key=lambda x: x.course, reverse=False)
-    return render(request, 'polls/courselist.jinja', {'courses': courses})
+    return render(request, 'courselist.jinja', {'courses': courses})
 
 
 def syllabiXmlHTML(request, xmldocname):
@@ -89,7 +89,7 @@ def schedulelistHtml(request):
         newfilename = filename.replace('.xml', "")
         schedulelist.append(newfilename)
     schedules = schedulelist
-    return render(request, "polls/schedulelist.jinja", {'schedules': schedules})
+    return render(request, "schedulelist.jinja", {'schedules': schedules})
 
 
 def scheduleHtml(request):
@@ -97,7 +97,7 @@ def scheduleHtml(request):
          Template """
     getSchedule().sort(key=lambda x: x.course, reverse=False)
     schedule = sorted(getSchedule(), key=lambda x: x.course, reverse=False)
-    return render(request, "polls/schedule.jinja", {'schedule': schedule})
+    return render(request, "schedule.jinja", {'schedule': schedule})
 
 
 def assignmentlistHtml(request):
@@ -110,7 +110,7 @@ def assignmentlistHtml(request):
         newfilename = filename.replace('.xml', "")
         schedulelist.append(newfilename)
     schedules = schedulelist
-    return render(request, "polls/assignmentlist.jinja", {'schedules': schedules})
+    return render(request, "assignmentlist.jinja", {'schedules': schedules})
 
 
 def scheduleTeachingAssignmentHtml(request):
@@ -135,7 +135,7 @@ def scheduleTeachingAssignmentHtml(request):
             if instructor.course == course.course:
                 total = total + course.workloadhours
     assignemnt_hours.append(final_total)
-    return render(request, "polls/teaching_assignments.jinja", {'assignment': assignment, 'courses': courses,
+    return render(request, "teaching_assignments.jinja", {'assignment': assignment, 'courses': courses,
                                                                 'assignment_hours': assignemnt_hours,
                                                                 'additional_assignments': additional_assignments})
 
@@ -184,4 +184,4 @@ def parseStandardsXml(request, standardsXml):
                 impvalue = s.getAttribute('importance')
                 values.append('outcome importance: ' + impvalue + ': ' + textvalue)
 
-    return render(request, 'polls/acmcs.jinja', {'values': values})
+    return render(request, 'acmcs.jinja', {'values': values})

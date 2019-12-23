@@ -1,6 +1,7 @@
 import os
-from polls.views import parseStandardsXml, scheduleHtml, schedulelistHtml, syllabiXmlHTML, \
-    scheduleTeachingAssignmentHtml
+from . import views
+#from views import parseStandardsXml, scheduleHtml, schedulelistHtml, syllabiXmlHTML, \
+#    scheduleTeachingAssignmentHtml
 
 
 ##All of these def's return a HttpResponse. They are not sent to a template
@@ -11,7 +12,7 @@ def parStandards(request):
     for filename in os.listdir(path):
         if not filename.endswith('acm-cs.xml'): continue
         fullname = os.path.join(path, filename)
-        xml = parseStandardsXml(request, fullname)
+        xml = views.parseStandardsXml(request, fullname)
     return xml
 
 
@@ -22,7 +23,7 @@ def parSchedule(request, schedule):
         if not filename.endswith(schedule + '.xml'): continue
         fullname = os.path.join(path, filename)
         print(fullname)
-        xml = scheduleHtml(request)
+        xml = views.scheduleHtml(request)
     return xml
 
 
@@ -33,7 +34,7 @@ def parTeachingAssignment(request, schedule):
         if not filename.endswith(schedule + '.xml'): continue
         fullname = os.path.join(path, filename)
         print(fullname)
-        xml = scheduleTeachingAssignmentHtml(request)
+        xml = views.scheduleTeachingAssignmentHtml(request)
     return xml
 
 
@@ -45,5 +46,5 @@ def parCourses(request, course):
         if not filename.endswith(course + '.xml'): continue
         fullname = os.path.join(path, filename)
         print("giving this one " + filename)
-        xml = syllabiXmlHTML(request, fullname)
+        xml = views.syllabiXmlHTML(request, fullname)
     return xml

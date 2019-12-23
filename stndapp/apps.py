@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class PollsConfig(AppConfig):
+class AppConfig(AppConfig):
     """ Needed for configuration of Web App  """
-    name = 'polls'
+    name = 'stndapp'
