@@ -1,5 +1,14 @@
 {%  extends "base.jinja" %}
   {% block title %}<title>Curriculum Standards</title>{% endblock %}
     {% block content %}
-      <h1>Hello World</h1>
+      {% if ay %}
+      <h1> Select an option from the left </h1>
+      {% else %}
+      <h1>Choose an Academic Year</h1>
+      <ul>
+      {% for year in years %}
+        <li><a href="/index/{{year}}"/>{{year}}</a></li>
+      {% endfor %}
+      </ul>
+      {% endif %}
     {% endblock %}

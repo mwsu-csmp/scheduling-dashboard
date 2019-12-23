@@ -15,11 +15,13 @@
     <div class="row">
       <div class="a">
         <ul class="sidebar-nav">
-          <li><b><a href={{ url('') }}>Home</a></b></li>
-          <li><b><a href={{ url('persemester') }}>Offered Per Semester</a></b></li>
-          <li><b><a href={{ url('courselist') }}>Course List</a></b></li>
-          <li><b><a href={{ url('schedulelist') }}>Schedule List</a></b></li>
-          <li><b><a href={{ url('assignmentlist') }}>Assignment Per Semester</a></b></li>
+		<li><b><a href={{ url('') }}>Home {% if ay %} (Choose Year){% endif %}</a></b></li>
+	  {% if ay %}
+	  <li><b><a href="/persemester/{{ay}}">Offered Per Semester</a></b></li>
+	  <li><b><a href="/courselist/{{ay}}">Course List</a></b></li>
+	  <li><b><a href="/schedulelist/{{ay}}">Schedule List</a></b></li>
+	  <li><b><a href="/assignmentlist/{{ay}}">Assignment Per Semester</a></b></li>
+	  {% endif %}
         </ul>
       </div>
       <div class="col-sm-10" style="margin-left:15%">{% block content %}{% endblock %}</div>
