@@ -21,10 +21,9 @@ def index(request):
 
 def persemester(request):
     """ Gets the objects from models.py and loads them into a template """
-    hours_per_semester = hours_per_semester_f.objects.all()
     courses = getCourses()
     return render(request, "persemester.jinja",
-                  {'courses': courses, 'hours_per_semester': hours_per_semester})
+                  {'courses': courses, 'hours_per_semester': hours_per_semester()})
 
 
 def coursesHtml(request):
