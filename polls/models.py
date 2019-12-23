@@ -1,5 +1,5 @@
 from django.db import models
-from curriculum.mwsu_curriculum.curriculumlib import *
+from mwsu_curriculum.curriculumlib import *
 
 """Python uses a MVC (Models - Views - Controller) system. Django adopts this and makes a small change. 
 Instead django uses a MVT (Model - Views - Template) system. Models sets up the information """

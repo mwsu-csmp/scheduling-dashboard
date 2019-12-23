@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 from .models import *
-from curriculum.mwsu_curriculum.curriculumlib import *
+from mwsu_curriculum.curriculumlib import *
 from jinja2 import Environment, FileSystemLoader
 
 file_loader = FileSystemLoader('polls/templates/polls')
