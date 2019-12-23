@@ -4,8 +4,8 @@ from pkg_resources import resource_filename
 
 ##All of these def's return a HttpResponse. They are not sent to a template
 
-def parStandards(request):
-    return views.syllabiXmlHTML(request, resource_filename('mwsu_curriculum', 'standards/'+request+'.xml'))
+def parStandards(request, standard):
+    return views.syllabiXmlHTML(request, resource_filename('mwsu_curriculum', 'standards/'+standard+'.xml'))
 
 def parSchedule(request, schedule):
     return views.syllabiXmlHTML(request, resource_filename('mwsu_curriculum', 'schedules/'+schedule+'.xml'))

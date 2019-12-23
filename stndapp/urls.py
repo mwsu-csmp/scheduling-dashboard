@@ -7,7 +7,7 @@ from . import xmlviews
 
 urlpatterns = [
     path('', views.index, name=''),
-    path('acmcs/', xmlviews.parStandards, name='acmcs'),
+    path('standard/<str:standard>/', xmlviews.parStandards, name='standard'),
     path('persemester/', views.persemester, name='persemester'),
     path('schedulelist/<str:schedule>/', xmlviews.parSchedule, name='schedule'),
     path('schedulelist/', views.schedulelistHtml, name='schedulelist'),
