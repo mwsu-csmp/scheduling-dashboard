@@ -81,7 +81,7 @@ def schedulelistHtml(request):
     """ This goes through and grabs all of the schedules in the schedule folder and adds them to the list that
      will be displayed inside of the Template """
     schedulelist = list()
-    path = 'curriculum/mwsu_curriculum/schedules/'
+    path = resource_filename('mwsu_curriculum', 'schedules')
     for filename in os.listdir(path):
         if not filename.endswith('.xml'): continue
         newfilename = filename.replace('.xml', "")
