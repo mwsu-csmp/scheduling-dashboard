@@ -140,8 +140,9 @@ def scheduleTeachingAssignmentHtml(request):
 
 # Parse and pull all data from the acm-cs.xml file and returns all info within an array.
 # this is used because of no xsl for this xml file
-def parseStandardsXml(request, standardsXml):
+def parseStandardsXml(request, standard):
     """ parses Standards then sets the information inside of the file to a list, this list is passed to the Template """
+    standardsXml = resource_filename('mwsu_curriculum', 'standards/'+standard+'.xml')
     xmldoc = minidom.parse(standardsXml)
     name = xmldoc.getElementsByTagName('name')
     body = xmldoc.getElementsByTagName('body')
