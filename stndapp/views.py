@@ -8,6 +8,8 @@ from django.template import loader
 from .models import *
 from mwsu_curriculum.curriculumlib import *
 from jinja2 import Environment, FileSystemLoader
+from pkg_resources import resource_filename
+
 
 file_loader = FileSystemLoader('templates')
 
@@ -33,18 +35,14 @@ def coursesHtml(request):
     return render(request, 'courselist.jinja', {'courses': courses})
 
 
-def syllabiXmlHTML(request, xmldocname):
-    """ This sets the chosen xml file finds it in the database and sets it to the xslt file."""
-    """ SPECIAL NOTE: All syllabi do not a template. They ALL display using XSLT """
-    courses = getCourses()
-    xslt_doc = etree.parse("curriculum/mwsu_curriculum/transformations/syllabus-to-html.xsl")
+def syllabiXmlHTML(request, course):
+    """renders a course syllabus using the XSLT template in the curriculum lib"""
+    xslt_doc = etree.parse(resource_filename('mwsu_curriculum', 'transformations/syllabus-to-html.xsl'))
     xslt_transformer = etree.XSLT(xslt_doc)
-    for course in courses:
-        name = 'curriculum/mwsu_curriculum/syllabi/' + course.course + '.xml'
-        if name == xmldocname:
-            source_doc = etree.parse(xmldocname)
-            output_doc = xslt_transformer(source_doc)
-            return HttpResponse(output_doc)
+    coursexmlfile = resource_filename('mwsu_curriculum', 'syllabi/'+course+'.xml')
+    source_doc = etree.parse(coursexmlfile)
+    output_doc = xslt_transformer(source_doc)
+    return HttpResponse(output_doc)
 
 
 def getCourses():

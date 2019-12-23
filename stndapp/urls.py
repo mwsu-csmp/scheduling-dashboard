@@ -14,5 +14,5 @@ urlpatterns = [
     path('assignmentlist/<str:schedule>/', xmlviews.parTeachingAssignment, name='assignment'),
     path('assignmentlist/', views.assignmentlistHtml, name='assignmentlist'),
     path('courselist/', views.coursesHtml, name='courselist'),
-    path('courselist/<str:course>/', xmlviews.parCourses, name='course'),
+    path('courselist/<str:course>/', views.syllabiXmlHTML, name='course'),
 ]
