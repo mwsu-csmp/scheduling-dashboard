@@ -31,8 +31,7 @@ def persemester(request, ay):
 def coursesHtml(request, ay):
     """ This gets the request(Name of the Course) and goes through the list of courses, and deploys the corresponding
      Template """
-    getCourses().sort(key=lambda x: x.course, reverse=False)
-    courses = sorted(getCourses(), key=lambda x: x.course, reverse=False)
+    courses = sorted(getCourses(ay), key=lambda x: x.course, reverse=False)
     return render(request, 'courselist.jinja', {'courses': courses, 'ay': ay})
 
 
@@ -40,7 +39,7 @@ def syllabiXmlHTML(request, course, ay):
     """renders a course syllabus using the XSLT template in the curriculum lib"""
     xslt_doc = etree.parse(resource_filename('mwsu_curriculum', 'transformations/syllabus-to-html.xsl'))
     xslt_transformer = etree.XSLT(xslt_doc)
-    coursexmlfile = resource_filename('mwsu_curriculum', 'syllabi/'+course+'.xml')
+    coursexmlfile = resource_filename('mwsu_curriculum', 'syllabi/'+ay+'/'+course+'.xml')
     source_doc = etree.parse(coursexmlfile)
     output_doc = xslt_transformer(source_doc)
     return HttpResponse(output_doc)
