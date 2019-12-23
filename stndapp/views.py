@@ -102,7 +102,7 @@ def assignmentlistHtml(request):
     """ This gets the request and goes through the list of assignments, and deploys the corresponding
          Template """
     schedulelist = list()
-    path = 'curriculum/mwsu_curriculum/schedules/'
+    path = resource_filename('mwsu_curriculum', 'schedules')
     for filename in os.listdir(path):
         if not filename.endswith('.xml'): continue
         newfilename = filename.replace('.xml', "")
@@ -111,7 +111,7 @@ def assignmentlistHtml(request):
     return render(request, "assignmentlist.jinja", {'schedules': schedules})
 
 
-def scheduleTeachingAssignmentHtml(request):
+def scheduleTeachingAssignmentHtml(request, semester):
     """ This sets the chosen xml file and sets it to the xslt file. """
     getSchedule().sort(key=lambda x: x.instructor, reverse=False)
     assignment = sorted(getSchedule(), key=lambda x: x.instructor, reverse=False)
