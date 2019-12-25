@@ -21,12 +21,10 @@ def index(request, ay=None):
     return render(request, "index.jinja", {'years': available_years()})
 
 
-def persemester(request, semester, year):
-    """ Gets the objects from models.py and loads them into a template """
-    courses = load_schedule(ay)
-    return render(request, "persemester.jinja",
-            {'courses': courses, 'hours_per_semester': hours_per_semester(ay), 'ay': ay})
-
+def offerings(request, ay):
+    """ retrieves a summary of all courses offered over a two year period """
+    return render(request, "offerings.jinja",
+            {'courses': load_syllabi(ay), 'hours_per_semester': hours_per_semester(ay), 'ay': ay})
 
 def catalog(request, ay):
     return render(request, 'catalog.jinja', {'courses': load_syllabi(ay), 'ay': ay})

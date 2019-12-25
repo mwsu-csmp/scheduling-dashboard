@@ -15,8 +15,8 @@
               {% for s in courses %}
                 {% if "fall" in s.offered %}
               <tr>
-                  <td>{{s.course}}</td>
-                  <td>{{ s.workloadhours }}</td>
+                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{ s.workload_hours }}</td>
               </tr>
                 {% endif %}
               {% endfor %}
@@ -28,8 +28,8 @@
               {% for s in courses %}
                 {% if "fall-odd" in s.offered %}
               <tr>
-                  <td>{{s.course}}</td>
-                  <td>{{ s.workloadhours }}</td>
+                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{ s.workload_hours }}</td>
               </tr>
                 {% endif %}
             {% endfor %}
@@ -41,8 +41,8 @@
               {% for s in courses %}
                 {% if "fall-even" in s.offered  %}
               <tr>
-                  <td>{{s.course}}</td>
-                  <td>{{ s.workloadhours }}</td>
+                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{ s.workload_hours }}</td>
               </tr>
                 {% endif %}
             {% endfor %}
@@ -54,8 +54,8 @@
               {% for s in courses %}
                 {% if "spring" in s.offered  %}
               <tr>
-                  <td>{{s.course}}</td>
-                  <td>{{ s.workloadhours }}</td>
+                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{ s.workload_hours }}</td>
               </tr>
                 {% endif %}
             {% endfor %}
@@ -67,8 +67,8 @@
               {% for s in courses %}
                 {% if "spring-odd" in s.offered  %}
               <tr>
-                  <td>{{s.course}}</td>
-                  <td>{{ s.workloadhours }}</td>
+                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{ s.workload_hours }}</td>
               </tr>
                 {% endif %}
             {% endfor %}
@@ -80,8 +80,8 @@
               {% for s in courses %}
                 {% if "spring-even" in s.offered  %}
               <tr>
-                  <td>{{s.course}}</td>
-                  <td>{{ s.workloadhours }}</td>
+                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{ s.workload_hours }}</td>
               </tr>
                 {% endif %}
             {% endfor %}
@@ -93,8 +93,8 @@
               {% for s in courses %}
                 {% if "discretion" in s.offered  %}
               <tr>
-                  <td>{{s.course}}</td>
-                  <td>{{ s.workloadhours }}</td>
+                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{ s.workload_hours }}</td>
               </tr>
                 {% endif %}
             {% endfor %}
@@ -106,8 +106,8 @@
               {% for s in courses %}
                 {% if "summer" in s.offered  %}
               <tr>
-                  <td>{{s.course}}</td>
-                  <td>{{ s.workloadhours }}</td>
+                  <td>{{s.subject}}{{s.number}}</td>
+                  <td>{{ s.workload_hours }}</td>
               </tr>
                 {% endif %}
             {% endfor %}
