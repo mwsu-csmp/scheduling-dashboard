@@ -18,10 +18,10 @@
 		<li><b><a href={{ url('') }}>Home {% if ay %} (Choose Year){% endif %}</a></b></li>
 	  {% if ay %}
 	  <li><b><a href="/catalog/{{ay}}">Catalog</a></b></li>
+	  <li><b><a href="/load/{{ay}}">Faculty Load Analysis</a></b></li>
 	  <!--
           <li><b><a href="/persemester/{{ay}}">Offered Per Semester</a></b></li>
 	  <li><b><a href="/courselist/{{ay}}">Course List</a></b></li>
-	  <li><b><a href="/assignmentlist/{{ay}}">Assignment Per Semester</a></b></li>
           /-->
 	  {% endif %}
         </ul>

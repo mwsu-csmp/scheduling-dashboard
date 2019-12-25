@@ -1,0 +1,26 @@
+{%  extends "base.jinja" %}
+   {% block title %}
+     <title>Schedule List</title>
+   {% endblock %}
+     {% block content %}
+        <h1> Faculty Load for {{ ay }}</h1>
+        <ul>
+        {% for instructor in roster %}
+            <li>{{ instructor.name }} ({{ instructor.id }}) - {{ instructor.load }} hours
+                <ul>
+                {% for section in instructor.fallSections %}
+                    <li>Fall {{section.course.subject}}{{section.course.number}}-{{section.section}}
+                    - {{section.course.workload_hours}} hours</li>
+                {% endfor %}
+                {% for section in instructor.springSections %}
+                    <li>Spring {{section.course.subject}}{{section.course.number}}-{{section.section}}
+                    - {{section.course.workload_hours}} hours</li>
+                {% endfor %}
+                {% for release in instructor.releases %}
+                    <li>Release:{{release}} - {{instructor.releases[release]}} hours</li>
+                {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+        </ul>
+     {% endblock %}

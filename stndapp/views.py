@@ -82,17 +82,29 @@ def scheduleHtml(request, ay):
     return render(request, "schedule.jinja", {'schedule': schedule, 'ay': ay})
 
 
-def assignmentlistHtml(request, ay):
-    """ This gets the request and goes through the list of assignments, and deploys the corresponding
-         Template """
-    schedulelist = list()
-    path = resource_filename('mwsu_curriculum', 'schedules')
-    for filename in os.listdir(path):
-        if not filename.endswith('.xml'): continue
-        newfilename = filename.replace('.xml', "")
-        schedulelist.append(newfilename)
-    schedules = schedulelist
-    return render(request, "assignmentlist.jinja", {'schedules': schedules, 'ay': ay})
+def load(request, ay):
+    """ determines faculty load for the given academic year """
+    roster = load_roster(ay)
+    fall = load_schedule('fa', ay[2:4])
+    spring = load_schedule('sp', ay[7:9])
+    for instructor in roster:
+        instructor.load = 0
+        instructor.fallSections = []
+        for release in instructor.releases:
+            instructor.load += instructor.releases[release]
+        for course in fall:
+            for section in fall[course]:
+                if section.instructorId == instructor.id:
+                    instructor.load += course.workload_hours
+                    instructor.fallSections.append(section)
+        instructor.springSections = []
+        for course in spring:
+            for section in spring[course]:
+                if section.instructorId == instructor.id:
+                    instructor.load += course.workload_hours
+                    instructor.springSections.append(section)
+
+    return render(request, "load.jinja", {'roster': roster, 'ay': ay})
 
 
 def scheduleTeachingAssignmentHtml(request, semester, ay):
