@@ -1,0 +1,12 @@
+{%  extends "base.jinja" %}
+   {% block title %}
+     <title>Course Catalog</title>
+   {% endblock %}
+     {% block content %}
+        <h1> Course Catalog </h1>
+        <ul>
+        {% for course in courses %}
+            <li><b><a href="/catalog/{{ay}}/{{ course.subject }}{{ course.number}}">{{ course.subject }}{{ course.number}}</a> - {{ course.title }}</b></li>
+        {% endfor %}
+        </ul>
+     {% endblock %}

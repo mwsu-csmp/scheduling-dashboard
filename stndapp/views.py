@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 from .models import *
-from mwsu_curriculum.curriculumlib import *
+from mwsu_curriculum import *
 from jinja2 import Environment, FileSystemLoader
 from pkg_resources import resource_filename
 
@@ -21,21 +21,18 @@ def index(request, ay=None):
     return render(request, "index.jinja", {'years': available_years()})
 
 
-def persemester(request, ay):
+def persemester(request, semester, year):
     """ Gets the objects from models.py and loads them into a template """
-    courses = getCourses(ay)
+    courses = load_schedule(ay)
     return render(request, "persemester.jinja",
             {'courses': courses, 'hours_per_semester': hours_per_semester(ay), 'ay': ay})
 
 
-def coursesHtml(request, ay):
-    """ This gets the request(Name of the Course) and goes through the list of courses, and deploys the corresponding
-     Template """
-    courses = sorted(getCourses(ay), key=lambda x: x.course, reverse=False)
-    return render(request, 'courselist.jinja', {'courses': courses, 'ay': ay})
+def catalog(request, ay):
+    return render(request, 'catalog.jinja', {'courses': load_syllabi(ay), 'ay': ay})
 
 
-def syllabiXmlHTML(request, course, ay):
+def syllabus(request, course, ay):
     """renders a course syllabus using the XSLT template in the curriculum lib"""
     xslt_doc = etree.parse(resource_filename('mwsu_curriculum', 'transformations/syllabus-to-html.xsl'))
     xslt_transformer = etree.XSLT(xslt_doc)
@@ -43,18 +40,6 @@ def syllabiXmlHTML(request, course, ay):
     source_doc = etree.parse(coursexmlfile)
     output_doc = xslt_transformer(source_doc)
     return HttpResponse(output_doc)
-
-
-def getCourses(ay):
-    """ Creates a list of all course objects """
-    courses = list()
-    for s in load_courses(ay):
-        course = courses_f(course=s.subject + s.number, title=s.title, scheduleType=s.scheduleType, offered=s.offered,
-                           workloadhours=s.workload_hours, catalogDescription=s.catalogDescription,
-                           prerequisites=s.prerequisites, objective=s.objective, topic=s.topic)
-        courses.append(course)
-    return courses
-
 
 def getSchedule(ay):
     """ Creates a list of all Schedule objects """
@@ -93,8 +78,7 @@ def schedulelistHtml(request, ay):
 def scheduleHtml(request, ay):
     """ This gets the request and goes through the list of schedules, and deploys the corresponding
          Template """
-    getSchedule().sort(key=lambda x: x.course, reverse=False)
-    schedule = sorted(getSchedule(), key=lambda x: x.course, reverse=False)
+    schedule = sorted(getSchedule(ay), key=lambda x: x.course, reverse=False)
     return render(request, "schedule.jinja", {'schedule': schedule, 'ay': ay})
 
 
@@ -118,8 +102,8 @@ def scheduleTeachingAssignmentHtml(request, semester, ay):
     additional_assignments = getAssignments(ay)
     for instructor in additional_assignments:
         print(instructor.instructor)
-    courses = getCourses()
-    assignemnt_hours = list()
+    courses = load_courses(ay)
+    roster = load_roster(ay)
     total = 0
     final_total = 0
     currentinstructor = ""
