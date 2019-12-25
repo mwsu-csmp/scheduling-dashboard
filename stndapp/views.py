@@ -5,7 +5,6 @@ from lxml import etree
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
-from .models import *
 from mwsu_curriculum import *
 from jinja2 import Environment, FileSystemLoader
 from pkg_resources import resource_filename
@@ -39,47 +38,6 @@ def syllabus(request, course, ay):
     output_doc = xslt_transformer(source_doc)
     return HttpResponse(output_doc)
 
-def getSchedule(ay):
-    """ Creates a list of all Schedule objects """
-    scheduleList = list()
-    for s in load_schedule(ay):
-        for i in s:
-            schedule = schedule_f(course=i[0], section_number=i[1], start_time=i[2],
-                                  end_time=i[3], day=i[7], building_room=i[4], max=i[5],
-                                  instructor=i[6])
-            scheduleList.append(schedule)
-    return scheduleList
-
-
-def getAssignments(ay):
-    """ Creates a list of all Assignment objects """
-    assignmentlist = list()
-    for s in load_assignments(ay):
-        assignment = assignments(instructor=s[0], workloadhours=s[1])
-        assignmentlist.append(assignment)
-    return assignmentlist
-
-
-def schedulelistHtml(request, ay):
-    """ This goes through and grabs all of the schedules in the schedule folder and adds them to the list that
-     will be displayed inside of the Template """
-    schedulelist = list()
-    path = resource_filename('mwsu_curriculum', 'schedules')
-    for filename in os.listdir(path):
-        if not filename.endswith('.xml'): continue
-        newfilename = filename.replace('.xml', "")
-        schedulelist.append(newfilename)
-    schedules = schedulelist
-    return render(request, "schedulelist.jinja", {'schedules': schedules, 'ay': ay})
-
-
-def scheduleHtml(request, ay):
-    """ This gets the request and goes through the list of schedules, and deploys the corresponding
-         Template """
-    schedule = sorted(getSchedule(ay), key=lambda x: x.course, reverse=False)
-    return render(request, "schedule.jinja", {'schedule': schedule, 'ay': ay})
-
-
 def load(request, ay):
     """ determines faculty load for the given academic year """
     roster = load_roster(ay)
@@ -105,36 +63,22 @@ def load(request, ay):
     return render(request, "load.jinja", {'roster': roster, 'ay': ay})
 
 
-def scheduleTeachingAssignmentHtml(request, semester, ay):
-    """ This sets the chosen xml file and sets it to the xslt file. """
-    getSchedule().sort(key=lambda x: x.instructor, reverse=False)
-    assignment = sorted(getSchedule(), key=lambda x: x.instructor, reverse=False)
-    additional_assignments = getAssignments(ay)
-    for instructor in additional_assignments:
-        print(instructor.instructor)
-    courses = load_courses(ay)
-    roster = load_roster(ay)
-    total = 0
-    final_total = 0
-    currentinstructor = ""
-    for instructor in assignment:
-        if currentinstructor != instructor.instructor:
-            final_total = total
-            total = 0
-            assignemnt_hours.append(final_total)
-        for course in courses:
-            currentinstructor = instructor.instructor
-            if instructor.course == course.course:
-                total = total + course.workloadhours
-    assignemnt_hours.append(final_total)
-    return render(request, "teaching_assignments.jinja", {'assignment': assignment, 'courses': courses,
-                                                                'ay': ay,
-                                                                'assignment_hours': assignemnt_hours,
-                                                                'additional_assignments': additional_assignments})
-
+def schedule(request, ay, semester):
+    """ List teaching assignments for a single semester """
+    if semester == 'fa':
+        year = ay[2:4]
+    else:
+        year = ay[7:9]
+    courses = load_schedule(semester, year)
+    sections = []
+    for course in courses:
+        sections = sections + courses[course]
+    sections = sorted(sections, key=lambda section : section.course.subject + str(section.course.number) + str(section.section))
+    return render(request, "teaching_assignments.jinja", {'sections': sections, 'ay': ay})
 
 # Parse and pull all data from the acm-cs.xml file and returns all info within an array.
 # this is used because of no xsl for this xml file
+# TODO: move parsing to curriculum lib and handle model here
 def parseStandardsXml(request, standard, ay):
     """ parses Standards then sets the information inside of the file to a list, this list is passed to the Template """
     standardsXml = resource_filename('mwsu_curriculum', 'standards/'+standard+'.xml')

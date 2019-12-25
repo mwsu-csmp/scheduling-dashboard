@@ -1,80 +1,37 @@
 {% extends "base.jinja" %}
    {% block title %}
-     <title>Course List</title>
+     <title>Teaching Schedule</title>
    {% endblock %}
      {% block content %}
 
-     <h1> Assignments </h1>
-
-
+     <h1> Teaching Schedule </h1>
      <table class="table" style="margin-bottom: 30px" border="1">
       <tr bgcolor="#9acd32">
           <th>Instructor</th>
           <th>Course</th>
-          <th>Section Number</th>
+          <th>Section</th>
           <th>Start Time</th>
           <th>End Time</th>
           <th>Days</th>
           <th>Building</th>
           <th>Max</th>
       </tr>
-        {% for courses in assignment %}
+        {% for section in sections %}
                 <tr>
-                    <td>{{ courses.instructor }}</td>
-                    <td>{{ courses.course }}</td>
-                    <td>{{ courses.section_number }}</td>
-                    <td>{{ courses.start_time }}</td>
-                    <td>{{ courses.end_time }}</td>
+                    <td>{{ section.instructorId }}</td>
+                    <td>{{ section.course.subject }}{{section.course.number}}</td>
+                    <td>{{ section.section}}</td>
+                    <td>{{ section.startTime }}</td>
+                    <td>{{ section.endTime }}</td>
                     <td>
-                    {% for days in courses.day %}
-                        {{ days }}
+                    {% for day in section.days %}
+                        {{ day }}
                      {% endfor %}
                     </td>
-                    <td>{{ courses.building_room }}</td>
-                    <td>{{ courses.max }}</td>
+                    <td>{{section.building}}{{section.room}}</td>
+                    <td>{{section.maxEnrollment}}</td>
                 </tr>
         {% endfor %}
-    </table>
-
-    <div style="clear:both;"></div>
-   <h2>Hours</h2>
-
-    <table class="AssignmentTable" style="margin-bottom: 30px" align="left">
-      <tr bgcolor="#9acd32">
-          <th>Instructor</th>
-      </tr>
-         {% for instructor in assignment | unique(attribute='instructor') %}
-             <tr>
-                <td>{{ instructor.instructor }}</td>
-             </tr>
-         {% endfor %}
-    </table>
-    {% set total = 0 %}
-    <table class="AssignmentTable" style="margin-bottom: 30px" align="left">
-      <tr bgcolor="#9acd32">
-          <th>Workload Hours</th>
-      </tr>
-        {% for hours in assignment_hours[1:] %}
-             <tr>
-                 <td>{{ hours }}</td>
-             </tr>
-        {% endfor %}
-    </table>
-
-   <div style="clear:both;"></div>
-   <h2>Additional Assignments</h2>
-
-    <table class="AssignmentTable" style="margin-bottom: 30px" align="left">
-      <tr bgcolor="#9acd32">
-          <th>Instructor</th>
-          <th>Hours</th>
-      </tr>
-         {% for instructor in additional_assignments %}
-             <tr>
-                <td>{{ instructor.instructor }}</td>
-                <td>{{ instructor.workloadhours }}</td>
-             </tr>
-         {% endfor %}
     </table>
 
      {% endblock %}

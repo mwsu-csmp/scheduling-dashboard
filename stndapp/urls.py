@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-from . import xmlviews
 
 """ This holds the url patterns for each of the pages """
 """ alot of the pages are using regex to find each selected course passed in through the url """
@@ -12,5 +11,6 @@ urlpatterns = [
     path('catalog/<str:ay>/<str:course>/', views.syllabus, name='course'),
     path('load/<str:ay>/', views.load, name='load'),
     path('offerings/<str:ay>/', views.offerings, name='offerings'),
+    path('schedule/<str:ay>/<str:semester>', views.schedule, name='schedule'),
 #    path('standard/<str:ay>/<str:standard>/', xmlviews.parStandards, name='standard'),
 ]
