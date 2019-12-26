@@ -81,9 +81,6 @@ def schedule(request, ay, semester):
         if not (section in bumped_sections):
             for section2 in sections:
                 if section is not section2 and section.conflicts_with(section2):
-                    print(section.course.subject+section.course.number+section.section)
-                    print('and')
-                    print(section2.course.subject+section2.course.number+section2.section)
                     bumped_sections.add(section2)
 
     for section in sections:
@@ -113,7 +110,6 @@ def schedule(request, ay, semester):
             'R': 4,
             'F': 5
     }
-    print(bumped_sections)
     return render(request, "teaching_assignments.jinja", 
             {'sections': sections, 'daypos': daypos, 'roster': roster, 
                 'instructor_color': instructor_color, 'ay': ay})
