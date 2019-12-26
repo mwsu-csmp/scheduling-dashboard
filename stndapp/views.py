@@ -85,8 +85,15 @@ def schedule(request, ay, semester):
           minutes += hour*60
           section.startPos = minutes
     roster = {}
+    instructor_color= {}
+    colors = ['red', 'blue', 'green', 'cyan', 'magenta', 'yellow', 
+            'orange', 'chartreuse', 'azure', 'violet', 'salmon']
+    i=0
     for instructor in load_roster(ay):
         roster[instructor.id] = instructor.name
+        instructor_color[instructor.id] = colors[i]
+        i += 1
+
     daypos = {
             'M': 1,
             'T': 2,
@@ -96,7 +103,8 @@ def schedule(request, ay, semester):
     }
 
     return render(request, "teaching_assignments.jinja", 
-            {'sections': sections, 'daypos': daypos, 'roster': roster, 'ay': ay})
+            {'sections': sections, 'daypos': daypos, 'roster': roster, 
+                'instructor_color': instructor_color, 'ay': ay})
 
 # Parse and pull all data from the acm-cs.xml file and returns all info within an array.
 # this is used because of no xsl for this xml file
