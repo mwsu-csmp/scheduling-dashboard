@@ -81,7 +81,7 @@ def schedule(request, ay, semester):
           hour, minutes = map(int, section.startTime.split(':'))
           if hour < 8:
               hour += 12
-          hour -= 8  # start at 8am
+          hour -= 7  # start at 8am
           minutes += hour*60
           section.startPos = minutes
     roster = {}
@@ -94,7 +94,7 @@ def schedule(request, ay, semester):
             'R': 4,
             'F': 5
     }
-    
+
     return render(request, "teaching_assignments.jinja", 
             {'sections': sections, 'daypos': daypos, 'roster': roster, 'ay': ay})
 
