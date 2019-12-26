@@ -76,6 +76,16 @@ def schedule(request, ay, semester):
     sections = sorted(sections, 
             key=lambda section : section.course.subject + str(section.course.number) + str(section.section))
 
+    bumped_sections = set()
+    for section in sections:
+        if not (section in bumped_sections):
+            for section2 in sections:
+                if section is not section2 and section.conflicts_with(section2):
+                    print(section.course.subject+section.course.number+section.section)
+                    print('and')
+                    print(section2.course.subject+section2.course.number+section2.section)
+                    bumped_sections.add(section2)
+
     for section in sections:
         if section.startTime:
           hour, minutes = map(int, section.startTime.split(':'))
@@ -84,6 +94,8 @@ def schedule(request, ay, semester):
           hour -= 7  # start at 8am
           minutes += hour*60
           section.startPos = minutes
+          section.position = 1 if section in bumped_sections else 0
+
     roster = {}
     instructor_color= {}
     colors = ['red', 'blue', 'green', 'cyan', 'magenta', 'yellow', 
@@ -101,7 +113,7 @@ def schedule(request, ay, semester):
             'R': 4,
             'F': 5
     }
-
+    print(bumped_sections)
     return render(request, "teaching_assignments.jinja", 
             {'sections': sections, 'daypos': daypos, 'roster': roster, 
                 'instructor_color': instructor_color, 'ay': ay})
