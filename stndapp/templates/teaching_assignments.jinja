@@ -27,28 +27,38 @@
      <hr/>
      <table class="table" style="margin-bottom: 30px" border="1">
       <tr bgcolor="#9acd32">
-          <th>Instructor</th>
+          <th>Instructor Name</th>
+          <th>Instructor ID</th>
           <th>Course</th>
           <th>Section</th>
           <th>Start Time</th>
           <th>End Time</th>
           <th>Days</th>
           <th>Building</th>
-          <th>Max</th>
+          <th>Max Enrollment</th>
       </tr>
         {% for section in sections %}
                 <tr>
                     <td style="background-color:{{instructor_color[section.instructorId]}}">{{ section.instructorId }}</td>
+                    <td style="background-color:{{instructor_color[section.instructorId]}}">{{ roster[section.instructorId] }}</td>
                     <td>{{ section.course.subject }}{{section.course.number}}</td>
                     <td>{{ section.section}}</td>
+                  {% if section.startTime %}
                     <td>{{ section.startTime }}</td>
                     <td>{{ section.endTime }}</td>
                     <td>
                     {% for day in section.days %}
                         {{ day }}
-                     {% endfor %}
+                    {% endfor %}
                     </td>
+                  {% else %}
+                    <td colspan=3><center>arranged / online</center></td>
+                  {% endif%}
+                  {% if section.building and section.room %}
                     <td>{{section.building}}{{section.room}}</td>
+                  {% else %}
+                    <td>none</td>
+                  {% endif%}
                     <td>{{section.maxEnrollment}}</td>
                 </tr>
         {% endfor %}
