@@ -73,8 +73,30 @@ def schedule(request, ay, semester):
     sections = []
     for course in courses:
         sections = sections + courses[course]
-    sections = sorted(sections, key=lambda section : section.course.subject + str(section.course.number) + str(section.section))
-    return render(request, "teaching_assignments.jinja", {'sections': sections, 'ay': ay})
+    sections = sorted(sections, 
+            key=lambda section : section.course.subject + str(section.course.number) + str(section.section))
+
+    for section in sections:
+        if section.startTime:
+          hour, minutes = map(int, section.startTime.split(':'))
+          if hour < 8:
+              hour += 12
+          hour -= 8  # start at 8am
+          minutes += hour*60
+          section.startPos = minutes
+    roster = {}
+    for instructor in load_roster(ay):
+        roster[instructor.id] = instructor.name
+    daypos = {
+            'M': 1,
+            'T': 2,
+            'W': 3,
+            'R': 4,
+            'F': 5
+    }
+    
+    return render(request, "teaching_assignments.jinja", 
+            {'sections': sections, 'daypos': daypos, 'roster': roster, 'ay': ay})
 
 # Parse and pull all data from the acm-cs.xml file and returns all info within an array.
 # this is used because of no xsl for this xml file

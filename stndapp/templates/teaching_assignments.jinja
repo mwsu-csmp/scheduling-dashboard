@@ -5,6 +5,18 @@
      {% block content %}
 
      <h1> Teaching Schedule </h1>
+    
+     <svg height="900" width="800">
+     {% for section in sections %}
+      {% for day in section.days %}
+         <rect x="{{daypos[day]*100}}" y="{{section.startPos}}" width="100" height="{{section.duration()}}" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />
+         <text x="{{daypos[day]*100+10}}" y="{{section.startPos+25}}">
+           {{section.course.subject}}{{section.course.number}}-{{section.section}}
+         </text>
+      {% endfor %}
+     {% endfor %}
+     </svg>
+     <hr/>
      <table class="table" style="margin-bottom: 30px" border="1">
       <tr bgcolor="#9acd32">
           <th>Instructor</th>
