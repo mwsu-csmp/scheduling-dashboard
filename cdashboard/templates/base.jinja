@@ -9,7 +9,7 @@
 <body>
  <div class="header">
   <img class="logo" src="/static/images/MWSUlogo.png">
-  <h1>Curriculum</h1>
+  <h1>Curriculum {% if ay %}{{ay}}{% endif %} </h1>
  </div>
   <div class="container-fluid">
     <div class="row">
@@ -17,12 +17,14 @@
         <ul class="sidebar-nav">
 		<li><b><a href={{ url('') }}>Home {% if ay %} (Choose Year){% endif %}</a></b></li>
 	  {% if ay %}
-	  <li><b><a href="/catalog/{{ay}}">Catalog</a></b></li>
           <li><b><a href="/offerings/{{ay}}">Summary of Offerings</a></b></li>
+	  <li><b>Teaching Schedules</b><ul>
+	    <li><b><a href="/schedule/{{ay}}/fa">Fall</a></b></li>
+	    <li><b><a href="/schedule/{{ay}}/sp">Spring</a></b></li>
+	    <li><b><a href="/schedule/{{ay}}/su">Summer</a></b></li>
+	  </ul></li>
 	  <li><b><a href="/load/{{ay}}">Faculty Load Analysis</a></b></li>
-	  <li><b><a href="/schedule/{{ay}}/fa">Fall Teaching Schedule</a></b></li>
-	  <li><b><a href="/schedule/{{ay}}/sp">Spring Teaching Schedule</a></b></li>
-	  <li><b><a href="/schedule/{{ay}}/su">Summer Teaching Schedule</a></b></li>
+	  <li><b><a href="/catalog/{{ay}}">Catalog</a></b></li>
 	  {% endif %}
         </ul>
       </div>
