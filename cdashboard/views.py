@@ -126,5 +126,7 @@ def standard(request, standard, ay):
     """ parses Standards then sets the information inside of the file to a list, this list is passed to the Template """
     standard_id = standard
     standard = load_standard(standard_id)
+    for syllabus in load_syllabi(ay):
+        standard.add_coverage(syllabus)
 
     return render(request, "curriculum_standard.jinja", {"standard": standard, 'ay': ay})

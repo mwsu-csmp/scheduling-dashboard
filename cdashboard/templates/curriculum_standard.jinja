@@ -1,7 +1,8 @@
 {%  extends "base.jinja" %}
 {% macro topics(ka) %}
         <ol> {% for topic in ka.topics %}
-             <li>{{ topic.text }}
+             <li><b>{{ topic.text }}</b><br/>
+               Coverage: {{ topic.coverage() }} 
                {% if topic.topics %}
                {{ topics(topic) }}
                {% endif %}
@@ -21,11 +22,13 @@
 
         {% if ka.topics %}
           <h3>Topics</h3>
+          Coverage: {{ ka.topic_coverage() }}
           {{ topics(ka) }}
         {% endif %}
 
         {% if ka.outcomes %}
         <h3>Learning Outcomes</h3>
+        Coverage: {{ ka.outcome_coverage() }}
         <ol> {% for outcome in ka.outcomes %}
              <li>{{ outcome.text }}</li>
              {% endfor %}
@@ -41,6 +44,8 @@
         <h1> {{standard.name}} </h1>
         <h2>Body</h2> {{ standard.body}}
         <h2>Version</h2> {{ standard.version }}
+	<h2>Outcome Coverage</h2> {{ standard.outcome_coverage()}}
+        <h2>Topic Coverage</h2> {{ standard.topic_coverage()}}
 
         <h3>Knowledge Areas</h3>
         <ul> {% for ka in standard.kas %}
