@@ -12,5 +12,6 @@ urlpatterns = [
     path('load/<str:ay>/', views.load, name='load'),
     path('offerings/<str:ay>/', views.offerings, name='offerings'),
     path('schedule/<str:ay>/<str:semester>', views.schedule, name='schedule'),
-#    path('standard/<str:ay>/<str:standard>/', xmlviews.parStandards, name='standard'),
+    path('standards/<str:ay>', views.standards, name='standards'),
+    path('standard/<str:ay>/<str:standard>', views.standard, name='standard'),
 ]

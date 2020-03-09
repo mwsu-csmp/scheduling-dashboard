@@ -1,0 +1,50 @@
+{%  extends "base.jinja" %}
+{% macro topics(ka) %}
+        <ol> {% for topic in ka.topics %}
+             <li>{{ topic.text }}
+               {% if topic.topics %}
+               {{ topics(topic) }}
+               {% endif %}
+             </li>
+             {% endfor %}
+        </ol>
+{% endmacro %}
+{% macro knowledge_area(ka) %}
+  <li><b>{{ka.id}}:</b>  {{ka.name}}
+        {% if ka.kas %}
+        <h3>Sub knowledge areas</h3>
+        <ul> {% for ska in ka.kas %}
+               {{ knowledge_area(ka.kas[ska]) }}
+             {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if ka.topics %}
+          <h3>Topics</h3>
+          {{ topics(ka) }}
+        {% endif %}
+
+        {% if ka.outcomes %}
+        <h3>Learning Outcomes</h3>
+        <ol> {% for outcome in ka.outcomes %}
+             <li>{{ outcome.text }}</li>
+             {% endfor %}
+        </ol>
+        {% endif %}
+  </li>
+{% endmacro %}
+
+   {% block title %}
+     <title>Curriculum Standards</title>
+   {% endblock %}
+     {% block content %}
+        <h1> {{standard.name}} </h1>
+        <h2>Body</h2> {{ standard.body}}
+        <h2>Version</h2> {{ standard.version }}
+
+        <h3>Knowledge Areas</h3>
+        <ul> {% for ka in standard.kas %}
+               {{ knowledge_area(standard.kas[ka]) }}
+             {% endfor %}
+        </ul>
+     {% endblock %}

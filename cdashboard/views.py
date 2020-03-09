@@ -114,50 +114,17 @@ def schedule(request, ay, semester):
             {'sections': sections, 'daypos': daypos, 'roster': roster, 
                 'instructor_color': instructor_color, 'ay': ay})
 
+
+def standards(request, ay):
+    """lists available curriculum standards"""
+    standards = load_standards()
+    return render(request, "curriculum_standards.jinja", {"standards": standards, 'ay': ay})
+
 # Parse and pull all data from the acm-cs.xml file and returns all info within an array.
 # this is used because of no xsl for this xml file
-# TODO: move parsing to curriculum lib and handle model here
-def parseStandardsXml(request, standard, ay):
+def standard(request, standard, ay):
     """ parses Standards then sets the information inside of the file to a list, this list is passed to the Template """
-    standardsXml = resource_filename('mwsu_curriculum', 'standards/'+standard+'.xml')
-    xmldoc = minidom.parse(standardsXml)
-    name = xmldoc.getElementsByTagName('name')
-    body = xmldoc.getElementsByTagName('body')
-    version = xmldoc.getElementsByTagName('version')
-    knowledgeArea = xmldoc.getElementsByTagName('knowledgeArea')
-    values = []
-    for s in name:
-        textvalue = s.firstChild.data
-        values.append('Name: ' + textvalue)
+    standard_id = standard
+    standard = load_standard(standard_id)
 
-    for s in body:
-        textvalue = s.firstChild.data
-        values.append('Body: ' + textvalue)
-
-    for s in version:
-        textvalue = s.firstChild.data
-        values.append('Version: ' + textvalue)
-
-    for s in knowledgeArea:
-        namevalue = s.getAttribute('name')
-        if not namevalue == "": continue
-        idvalue = s.getAttribute('id')
-        namevalue = s.getAttribute('name')
-        values.append('Knowledge Area id: ' + idvalue)
-        subKnowledgeArea = s.getElementsByTagName('knowledgeArea')
-        for s in subKnowledgeArea:
-            idvalue = s.getAttribute('id')
-            namevalue = s.getAttribute('name')
-            values.append('Knowledge Area ' + 'id: ' + idvalue + ' name: ' + namevalue)
-            subTopics = s.getElementsByTagName('topic')
-            subOutcomes = s.getElementsByTagName('outcome')
-            for s in subTopics:
-                textvalue = s.firstChild.data
-                impvalue = s.getAttribute('importance')
-                values.append(' topic importance: ' + impvalue + ': ' + textvalue)
-            for s in subOutcomes:
-                textvalue = s.firstChild.data
-                impvalue = s.getAttribute('importance')
-                values.append('outcome importance: ' + impvalue + ': ' + textvalue)
-
-    return render(request, 'acmcs.jinja', {'values': values, 'ay': ay})
+    return render(request, "curriculum_standard.jinja", {"standard": standard, 'ay': ay})

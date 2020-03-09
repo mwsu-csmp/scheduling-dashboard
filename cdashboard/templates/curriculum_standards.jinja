@@ -1,0 +1,12 @@
+{%  extends "base.jinja" %}
+   {% block title %}
+     <title>Curriculum Standards</title>
+   {% endblock %}
+     {% block content %}
+        <h1> Curriculum Standards </h1>
+        <ul>
+        {% for standard in standards %}
+            <li><b><a href="/standard/{{ay}}/{{standard}}">{{ standards[standard].name}} - {{ standards[standard].body}}</a> ( ver. {{standards[standard].version}})</b></li>
+        {% endfor %}
+        </ul>
+     {% endblock %}
