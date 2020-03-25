@@ -86,8 +86,9 @@ def schedule(request, ay, semester):
         for section in sections:
             for section2 in sections:
                 if section is not section2  and section.conflicts_with(section2): # two overlapping sections
-                    #if section.instructor == section2.instructor: # instructors assigned to two simultaneous classes
-                    #    alerts.add(str(section) + ' overlaps with ' + str(section2) + ' and both are taught by ' + section.instructor)
+                    if section.instructorId == section2.instructorId: # instructors assigned to two simultaneous classes
+                        alerts.append(section.course.subject+section.course.number + ' overlaps with ' + \
+                                section2.course.subject+section2.course.number + ' and both are taught by ' + section.instructorId)
                     # TODO: test
                     # TODO: repeat for rooms
                     if section.position == section2.position: # reposition on rendering
