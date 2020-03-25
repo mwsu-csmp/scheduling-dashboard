@@ -43,8 +43,8 @@
       </tr>
         {% for section in sections %}
                 <tr>
-                    <td style="background-color:{{instructor_color[section.instructorId]}}">{{ section.instructorId }}</td>
-                    <td style="background-color:{{instructor_color[section.instructorId]}}">{{ roster[section.instructorId] }}</td>
+                    <td style="background-color:{{instructor_color[section.instructorId]}}">{{ section.instructorId if section.instructorId else 'STAFF' }}</td>
+                    <td style="background-color:{{instructor_color[section.instructorId]}}">{{ roster[section.instructorId] if section.instructorId else 'To Be Determined'}}</td>
                     <td>{{ section.course.subject }}{{section.course.number}}</td>
                     <td>{{ section.section}}</td>
                   {% if section.startTime %}
