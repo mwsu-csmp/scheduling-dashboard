@@ -80,8 +80,8 @@ def schedule(request, ay, semester):
     for section in sections:
         section.position = 0
     positions_modified = True
-    daylengths = {'M':2, 'T': 2, 'W': 2, 'R': 2, 'F':1}
-    while positions_modified:
+    daylengths = {'M':2, 'T': 2, 'W': 2, 'R': 2, 'F':1} # number of columns for each day in visualization
+    while positions_modified:  # find overlapping sections and assign columns to them
         positions_modified = False
         for section in sections:
             for section2 in sections:
@@ -89,7 +89,6 @@ def schedule(request, ay, semester):
                     if section.instructorId == section2.instructorId: # instructors assigned to two simultaneous classes
                         alerts.append(section.course.subject+section.course.number + ' overlaps with ' + \
                                 section2.course.subject+section2.course.number + ' and both are taught by ' + section.instructorId)
-                    # TODO: test
                     # TODO: repeat for rooms
                     if section.position == section2.position: # reposition on rendering
                         section2.position = section.position + 1
@@ -98,7 +97,7 @@ def schedule(request, ay, semester):
                                 daylengths[day] = max(daylengths[day], section2.position+1)
                         positions_modified = True
 
-    for section in sections:
+    for section in sections: # parse start times to hours/minutes
         if section.startTime:
           hour, minutes = map(int, section.startTime.split(':'))
           if hour < 8:
@@ -106,6 +105,20 @@ def schedule(request, ay, semester):
           hour -= 7  # start at 8am
           minutes += hour*60
           section.startPos = minutes
+
+    # check for missing / extra courses
+    required_courses = set(courses_in_semester(ay, semester))
+    offered_courses = set()
+    for section in sections:
+        name = section.course.subject+section.course.number
+        offered_courses.add(name)
+        if name not in required_courses:
+            alerts.append(name + ' not required this semester')
+    for name in required_courses - offered_courses:
+        alerts.append(name + ' required to be offered but not on schedule')
+    print('required: ' + str(required_courses))
+    print('offered: ' + str(offered_courses))
+
 
     roster = {}
     instructor_color= {}
@@ -117,6 +130,7 @@ def schedule(request, ay, semester):
         instructor_color[instructor.id] = colors[i]
         i += 1
 
+    # determine offset for each day in visualization
     daypos = {
             'M': 0,
             'T': daylengths['M'],
