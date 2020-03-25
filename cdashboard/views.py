@@ -65,6 +65,7 @@ def load(request, ay):
 
 def schedule(request, ay, semester):
     """ List teaching assignments for a single semester """
+    alerts = []  # possible errors in the schedule to alert the reader to
     if semester == 'fa':
         year = ay[2:4]
     else:
@@ -76,12 +77,25 @@ def schedule(request, ay, semester):
     sections = sorted(sections, 
             key=lambda section : section.course.subject + str(section.course.number) + str(section.section))
 
-    bumped_sections = set()
     for section in sections:
-        if not (section in bumped_sections):
+        section.position = 0
+    positions_modified = True
+    daylengths = {'M':2, 'T': 2, 'W': 2, 'R': 2, 'F':1}
+    while positions_modified:
+        positions_modified = False
+        for section in sections:
             for section2 in sections:
-                if section is not section2 and section.conflicts_with(section2):
-                    bumped_sections.add(section2)
+                if section is not section2  and section.conflicts_with(section2): # two overlapping sections
+                    #if section.instructor == section2.instructor: # instructors assigned to two simultaneous classes
+                    #    alerts.add(str(section) + ' overlaps with ' + str(section2) + ' and both are taught by ' + section.instructor)
+                    # TODO: test
+                    # TODO: repeat for rooms
+                    if section.position == section2.position: # reposition on rendering
+                        section2.position = section.position + 1
+                        for day in daylengths:
+                            if day in section2.days:
+                                daylengths[day] = max(daylengths[day], section2.position+1)
+                        positions_modified = True
 
     for section in sections:
         if section.startTime:
@@ -91,7 +105,6 @@ def schedule(request, ay, semester):
           hour -= 7  # start at 8am
           minutes += hour*60
           section.startPos = minutes
-          section.position = 1 if section in bumped_sections else 0
 
     roster = {}
     instructor_color= {}
@@ -104,15 +117,15 @@ def schedule(request, ay, semester):
         i += 1
 
     daypos = {
-            'M': 1,
-            'T': 2,
-            'W': 3,
-            'R': 4,
-            'F': 5
+            'M': 0,
+            'T': daylengths['M'],
+            'W': daylengths['M'] + daylengths['T'],
+            'R': daylengths['M'] + daylengths['T'] + daylengths['W'],
+            'F': daylengths['M'] + daylengths['T'] + daylengths['W'] + daylengths['R']
     }
     return render(request, "teaching_assignments.jinja", 
             {'sections': sections, 'daypos': daypos, 'roster': roster, 
-                'instructor_color': instructor_color, 'ay': ay})
+                'instructor_color': instructor_color, 'ay': ay, 'alerts': alerts})
 
 
 def standards(request, ay):

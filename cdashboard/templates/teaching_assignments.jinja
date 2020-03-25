@@ -8,9 +8,9 @@
     
      <svg height="900" width="900">
      {% for day in daypos %}
-         <line x1="{{daypos[day]*150 - 100}}" y1="0" 
-               x2="{{daypos[day]*150 - 100}}" y2="900" style="stroke:black;stroke-width:2"/>
-         <text x="{{daypos[day]*150-90}}" y="15"> {{day}} </text>
+         <line x1="{{daypos[day]*75 + 50}}" y1="0" 
+               x2="{{daypos[day]*75 + 50}}" y2="900" style="stroke:black;stroke-width:2"/>
+         <text x="{{daypos[day]*75+60}}" y="15"> {{day}} </text>
      {% endfor %}
      {% for pos in range(1,16) %}
          <line x1="0" y1="{{pos*60}}" x2="900" y2="{{pos*60}}" style="stroke:black;stroke-width:2"/>
@@ -18,11 +18,11 @@
      {% endfor %}
      {% for section in sections %}
       {% for day in section.days %}
-         <rect x="{{daypos[day]*150-100 + 75*section.position}}" y="{{section.startPos}}" width="75" height="{{section.duration()}}" style="fill:{{instructor_color[section.instructorId]}};stroke-width:3;stroke:black" />
-         <text x="{{daypos[day]*150-90 + 75*section.position}}" y="{{section.startPos+25}}">
+         <rect x="{{daypos[day]*75+50 + 75*section.position}}" y="{{section.startPos}}" width="75" height="{{section.duration()}}" style="fill:{{instructor_color[section.instructorId]}};stroke-width:3;stroke:black" />
+         <text x="{{daypos[day]*75+60 + 75*section.position}}" y="{{section.startPos+25}}">
            {{section.course.subject}}{{section.course.number}}
          </text>
-         <text x="{{daypos[day]*150-90 + 75*section.position}}" y="{{section.startPos+40}}">
+         <text x="{{daypos[day]*75+60 + 75*section.position}}" y="{{section.startPos+40}}">
            Sec. {{section.section}}
          </text>
       {% endfor %}
@@ -68,4 +68,10 @@
         {% endfor %}
     </table>
 
+     <h2> Alerts</h2>
+     <ul>
+     {% for alert in alerts %}
+       <li>blah</li>
+     {% endfor %}
+     </ul>
      {% endblock %}
