@@ -51,13 +51,13 @@ def load(request, ay):
         for course in fall:
             for section in fall[course]:
                 if section.instructorId == instructor.id:
-                    instructor.load += course.workload_hours
+                    instructor.load += section.workload_hours
                     instructor.fallSections.append(section)
         instructor.springSections = []
         for course in spring:
             for section in spring[course]:
                 if section.instructorId == instructor.id:
-                    instructor.load += course.workload_hours
+                    instructor.load += section.workload_hours
                     instructor.springSections.append(section)
 
     return render(request, "load.jinja", {'roster': roster, 'ay': ay})

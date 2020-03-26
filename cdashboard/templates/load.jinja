@@ -10,11 +10,11 @@
                 <ul>
                 {% for section in instructor.fallSections %}
                     <li>Fall {{section.course.subject}}{{section.course.number}}-{{section.section}}
-                    - {{section.course.workload_hours}} hours</li>
+                    - {{section.workload_hours}} hours</li>
                 {% endfor %}
                 {% for section in instructor.springSections %}
                     <li>Spring {{section.course.subject}}{{section.course.number}}-{{section.section}}
-                    - {{section.course.workload_hours}} hours</li>
+                    - {{section.workload_hours}} hours</li>
                 {% endfor %}
                 {% for release in instructor.releases %}
                     <li>Release:{{release}} - {{instructor.releases[release]}} hours</li>
