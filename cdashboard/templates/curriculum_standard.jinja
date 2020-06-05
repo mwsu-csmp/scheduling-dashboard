@@ -10,12 +10,12 @@
              {% endfor %}
         </ol>
 {% endmacro %}
-{% macro knowledge_area(ka) %}
-  <li><b>{{ka.id}}:</b>  {{ka.name}}
+{% macro knowledge_area(ka, parent) %}
+  <li><h2>{{ parent }}{{ka.id}}:  {{ka.name}} </h2>
         {% if ka.kas %}
         <h3>Sub knowledge areas</h3>
         <ul> {% for ska in ka.kas %}
-               {{ knowledge_area(ka.kas[ska]) }}
+               {{ knowledge_area(ka.kas[ska], parent+ka.id+'/') }}
              {% endfor %}
         </ul>
         {% endif %}
@@ -30,7 +30,12 @@
         <h3>Learning Outcomes</h3>
         Coverage: {{ ka.outcome_coverage() }}
         <ol> {% for outcome in ka.outcomes %}
-             <li>{{ outcome.text }}</li>
+             <li>{{ outcome.text }}<ul>
+               {% for syllabus in outcome.covered_by %}
+               <li><a href="/catalog/{{ay}}/{{syllabus[0]}}{{syllabus[1]}}#{{syllabus[2]}}">
+                  {{syllabus[0]}}{{syllabus[1]}} #{{syllabus[2]}}</a></li>
+               {% endfor %}
+             </ul></li>
              {% endfor %}
         </ol>
         {% endif %}
@@ -49,7 +54,7 @@
 
         <h3>Knowledge Areas</h3>
         <ul> {% for ka in standard.kas %}
-               {{ knowledge_area(standard.kas[ka]) }}
+               {{ knowledge_area(standard.kas[ka], '') }}
              {% endfor %}
         </ul>
      {% endblock %}
