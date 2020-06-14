@@ -13,5 +13,6 @@ urlpatterns = [
     path('offerings/<str:ay>/', views.offerings, name='offerings'),
     path('schedule/<str:ay>/<str:semester>', views.schedule, name='schedule'),
     path('standards/<str:ay>', views.standards, name='standards'),
-    path('standard/<str:ay>/<str:standard>', views.standard, name='standard'),
+    path('standard/<str:ay>/<str:standard_id>', views.standard, name='standard'),
+    path('standard/<str:ay>/<str:standard_id>/<str:program_id>', views.standard, name='standard'),
 ]

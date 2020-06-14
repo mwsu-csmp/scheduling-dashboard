@@ -150,11 +150,18 @@ def standards(request, ay):
 
 # Parse and pull all data from the acm-cs.xml file and returns all info within an array.
 # this is used because of no xsl for this xml file
-def standard(request, standard, ay):
+def standard(request, standard_id, ay, program_id=None):
     """ parses Standards then sets the information inside of the file to a list, this list is passed to the Template """
-    standard_id = standard
     standard = load_standard(standard_id)
-    for syllabus in load_syllabi(ay):
-        standard.add_coverage(syllabus)
+    program = None
+    if program_id:
+        program = load_program(ay, program_id)
+    if not program:
+        for syllabus in load_syllabi(ay):
+            standard.add_coverage(syllabus)
+        return render(request, "curriculum_standard.jinja", {"standard": standard, 'ay': ay, 'programs': load_programs(ay)})
+    else:
+        for syllabus in program.available_courses():
+            standard.add_coverage(syllabus)
+        return render(request, "curriculum_standard.jinja", {"standard": standard, 'ay': ay, 'program': program})
 
-    return render(request, "curriculum_standard.jinja", {"standard": standard, 'ay': ay})
