@@ -2,7 +2,15 @@
 {% macro topics(ka) %}
         <ol> {% for topic in ka.topics %}
              <li><b>{{ topic.text }}</b><br/>
-               Coverage: {{ topic.coverage() }} 
+               Coverage: <span class="{{'covered' if topic.coverage() == 1.0 else 'partially_covered' if topic.coverage() > 0.5 else 'not_covered'}}">
+          {{ (10000*topic.coverage() + 0.5) // 1 / 100 }}%
+               <ul>
+               {% for syllabus in topic.covered_by %}
+               <li><a href="/catalog/{{ay}}/{{syllabus[0]}}{{syllabus[1]}}#{{syllabus[2]}}">
+                  {{syllabus[0]}}{{syllabus[1]}} #{{syllabus[2]}}</a></li>
+               {% endfor %}
+               </ul>
+
                {% if topic.topics %}
                {{ topics(topic) }}
                {% endif %}
@@ -22,20 +30,25 @@
 
         {% if ka.topics %}
           <h3>Topics</h3>
-          Coverage: {{ ka.topic_coverage() }}
+          Coverage: <span class="{{'covered' if ka.topic_coverage() == 1.0 else 'partially_covered' if ka.topic_coverage() > 0.5 else 'not_covered'}}">
+          {{ (10000*ka.topic_coverage() + 0.5) // 1 / 100 }}%
+        </span>
           {{ topics(ka) }}
         {% endif %}
 
         {% if ka.outcomes %}
         <h3>Learning Outcomes</h3>
-        Coverage: {{ ka.outcome_coverage() }}
+        Coverage: <span class="{{'covered' if ka.outcome_coverage() == 1.0 else 'partially_covered' if ka.outcome_coverage() > 0.5 else 'not_covered'}}">
+          {{ (10000*ka.outcome_coverage() + 0.5) // 1 / 100 }}%
+        </span>
         <ol> {% for outcome in ka.outcomes %}
-             <li>{{ outcome.text }}<ul>
+             <li class="{{'covered' if outcome.covered_by else 'not_covered'}}">{{ outcome.text }}<ul>
                {% for syllabus in outcome.covered_by %}
                <li><a href="/catalog/{{ay}}/{{syllabus[0]}}{{syllabus[1]}}#{{syllabus[2]}}">
                   {{syllabus[0]}}{{syllabus[1]}} #{{syllabus[2]}}</a></li>
                {% endfor %}
-             </ul></li>
+             </ul>
+             </li>
              {% endfor %}
         </ol>
         {% endif %}
@@ -49,8 +62,10 @@
         <h1> {{standard.name}} </h1>
         <h2>Body</h2> {{ standard.body}}
         <h2>Version</h2> {{ standard.version }}
-	<h2>Outcome Coverage</h2> {{ standard.outcome_coverage()}}
-        <h2>Topic Coverage</h2> {{ standard.topic_coverage()}}
+	<h2>Outcome Coverage</h2> <span class="{{'covered' if standard.outcome_coverage() == 1.0 else 'partially_covered' if standard.outcome_coverage() > 0.5 else 'not_covered'}}">
+          {{ (10000*standard.outcome_coverage() + 0.5) // 1 / 100 }}%
+        <h2>Topic Coverage</h2> <span class="{{'covered' if standard.topic_coverage() == 1.0 else 'partially_covered' if standard.topic_coverage() > 0.5 else 'not_covered'}}">
+          {{ (10000*standard.topic_coverage() + 0.5) // 1 / 100 }}%
 
         <h3>Knowledge Areas</h3>
         <ul> {% for ka in standard.kas %}

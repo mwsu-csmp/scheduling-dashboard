@@ -39,3 +39,15 @@ table, td, th {
   border-collapse: collapse;
   float: bottom;
 }
+
+.covered {
+    background-color: lightgreen;
+}
+
+.not_covered {
+    background-color: pink;
+}
+
+.partially_covered {
+    background-color: yellow;
+}
