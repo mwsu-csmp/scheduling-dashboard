@@ -165,3 +165,11 @@ def standard(request, standard_id, ay, program_id=None):
             standard.add_coverage(syllabus)
         return render(request, "curriculum_standard.jinja", {"standard": standard, 'ay': ay, 'program': program})
 
+def program(request, program_id, ay):
+    program = load_program(ay, program_id)
+    return render(request, "program.jinja", {'ay': ay, 'program': program})
+
+def programs(request, ay):
+    """lists available curriculum standards"""
+    programs = load_programs(ay)
+    return render(request, "programs.jinja", {"programs": programs, 'ay': ay})

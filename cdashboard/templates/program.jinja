@@ -1,0 +1,70 @@
+{% extends "base.jinja" %}
+
+{% macro course_m(course) %}
+<a href="/catalog/{{ay}}/{{course.subject}}{{course.number}}/">{{course.subject}}{{course.number}}</a>: {{course.title}}
+ - {{course.credit_hours}} hours
+{% endmacro %}
+
+
+{% macro conjunction_m(conj) %}
+  conjunction hours: {{ conj.min_hours() }}
+  <ul class='conjunctive_requirement'>
+  {% for course in conj.courses %}
+    <li>{{ course_m(course) }}</li>
+  {% endfor %}
+  </ul>
+{% endmacro %}
+
+
+{% macro disjunction_m(disj) %}
+    Disjunction: min hours: {{ disj.min_hours() }}, max hours: {{ disj.max_hours() }}
+  <ul class='disjunctive_requirement'>
+  {% for course in disj.courses %}
+    <li>{{ course_m(course) }}</li>
+  {% endfor %}
+  {% for conj in disj.conjunctions %}
+    <li>{{ conjunction_m(conj) }}</li>
+  {% endfor %}
+  </ul>
+{% endmacro %}
+
+
+{% macro requirement_m(req) %}
+  <ul class='program_requirement'>
+  {% for course in req.courses %}
+    <li>{{ course_m(course) }}</li>
+  {% endfor %}
+  {% for disj in req.disjunctions %}
+    <li>{{ disjunction_m(disj) }}</li>
+  {% endfor %}
+  </ul>
+{% endmacro %}
+
+
+{% macro section_m(section) %}
+  <ul class='program_section'>
+    <li>Section min hours: {{ section.min_hours() }}, max hours: {{ section.max_hours() }} </li>
+  {% for req in section.requirements %}
+  {{requirement_m(req)}}
+  {% endfor %}
+  </ul>
+{% endmacro %}
+{% macro program_m(prog) %}
+  {% if prog.parent %}
+    {{ program_m(prog.parent) }}
+  {% endif %}
+  {% for section in prog.sections %}
+    {{ section_m(section) }}
+  {% endfor %}
+{% endmacro %}
+
+
+   {% block title %}
+     <title>{{ay}} Program: {{program.name}}</title>
+   {% endblock %}
+     {% block content %}
+        <h1> Program {{program.name}}</h1>
+        <h3>Min Hours: {{program.min_hours()}}</h3>
+        <h3>Max Hours: {{program.max_hours()}}</h3>
+	     {{program_m(program)}}
+     {% endblock %}
