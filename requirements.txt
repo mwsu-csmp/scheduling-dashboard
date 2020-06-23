@@ -1,0 +1,6 @@
+django
+django-jinja
+django-jinja2
+jinja2
+lxml
+gunicorn
