@@ -1,5 +1,5 @@
 import xml.dom.minidom as minidom
-
+from collections import OrderedDict
 import jinja2
 from lxml import etree
 from django.shortcuts import render
@@ -17,16 +17,18 @@ def index(request, ay=None):
     """ finds and displays the index.jinja template """
     if ay:
         return render(request, "index.jinja", {'years': available_years(), 'ay': ay})
-    return render(request, "index.jinja", {'years': available_years()})
+    return render(request, "index.jinja", {'years': sorted(available_years())})
 
 
 def offerings(request, ay):
     """ retrieves a summary of all courses offered over a two year period """
     return render(request, "offerings.jinja",
-            {'courses': load_syllabi(ay), 'hours_per_semester': hours_per_semester(ay), 'ay': ay})
+            {'courses': sorted(load_syllabi(ay), key=lambda s: s.subject+s.number),
+             'hours_per_semester': hours_per_semester(ay), 'ay': ay})
 
 def catalog(request, ay):
-    return render(request, 'catalog.jinja', {'courses': load_syllabi(ay), 'ay': ay})
+    return render(request, 'catalog.jinja', {'courses': sorted(load_syllabi(ay), key = lambda s : s.subject + s.number),
+                                             'ay': ay})
 
 
 def syllabus(request, course, ay):
@@ -60,7 +62,7 @@ def load(request, ay):
                     instructor.load += section.workload_hours
                     instructor.springSections.append(section)
 
-    return render(request, "load.jinja", {'roster': roster, 'ay': ay})
+    return render(request, "load.jinja", {'roster': sorted(roster, key= lambda i:i.id), 'ay': ay})
 
 
 def schedule(request, ay, semester):
@@ -139,14 +141,17 @@ def schedule(request, ay, semester):
             'F': daylengths['M'] + daylengths['T'] + daylengths['W'] + daylengths['R']
     }
     return render(request, "teaching_assignments.jinja", 
-            {'sections': sections, 'daypos': daypos, 'roster': roster, 
+            {'sections': sections, 'daypos': daypos, 'roster': roster,
                 'instructor_color': instructor_color, 'ay': ay, 'alerts': alerts})
 
 
 def standards(request, ay):
     """lists available curriculum standards"""
     standards = load_standards()
-    return render(request, "curriculum_standards.jinja", {"standards": standards, 'ay': ay})
+    ssorted = OrderedDict()
+    for standard in sorted(standards):
+        ssorted[standard] = standards[standard]
+    return render(request, "curriculum_standards.jinja", {"standards": ssorted, 'ay': ay})
 
 # Parse and pull all data from the acm-cs.xml file and returns all info within an array.
 # this is used because of no xsl for this xml file
@@ -172,4 +177,7 @@ def program(request, program_id, ay):
 def programs(request, ay):
     """lists available curriculum standards"""
     programs = load_programs(ay)
-    return render(request, "programs.jinja", {"programs": programs, 'ay': ay})
+    psorted = OrderedDict()
+    for program in sorted(programs):
+        psorted[program] = programs[program]
+    return render(request, "programs.jinja", {"programs": psorted, 'ay': ay})
