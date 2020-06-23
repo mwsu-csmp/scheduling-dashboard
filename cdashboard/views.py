@@ -31,7 +31,7 @@ def catalog(request, ay):
                                              'ay': ay})
 
 
-def syllabus(request, course, ay):
+def printable_syllabus(request, course, ay):
     """renders a course syllabus using the XSLT template in the curriculum lib"""
     xslt_doc = etree.parse(resource_filename('mwsu_curriculum', 'transformations/syllabus-to-html.xsl'))
     xslt_transformer = etree.XSLT(xslt_doc)
@@ -39,6 +39,12 @@ def syllabus(request, course, ay):
     source_doc = etree.parse(coursexmlfile)
     output_doc = xslt_transformer(source_doc)
     return HttpResponse(output_doc)
+
+
+def syllabus(request, course, ay):
+    syllabus = load_syllabus(ay, course[0:3], course[3:])
+    return render(request, "syllabus.jinja", {'syllabus': syllabus, 'ay': ay})
+
 
 def load(request, ay):
     """ determines faculty load for the given academic year """

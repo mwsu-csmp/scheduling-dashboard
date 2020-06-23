@@ -1,0 +1,59 @@
+{% extends "base.jinja" %}
+
+{% macro topics(ts) %}
+  <ul>
+  {% for topic in ts%}
+     <li id="topic{{topic.id}}"><b>{{ topic.text }}</b>
+
+     {% if topic.coverages %}
+     <ul>
+     {% for coverage in topic.coverages %}
+       <li> covers <a href="/standard/{{ay}}/{{coverage.standard}}#topic{{coverage.knowledgeArea}}-{{coverage.id}}">{{coverage.standard}}: {{coverage.knowledgeArea}} #{{coverage.id}}</a></li>
+     {% endfor %}
+     </ul>
+     {% endif %}
+
+     {% if topic.subtopics %}
+       {{ topics(topic.subtopics) }}
+     {% endif %}
+     </li>
+  {% endfor %}
+  </ul>
+{% endmacro %}
+
+{% macro objectives(syllabus) %}
+  <ul>
+  {% for objective in syllabus.objectives %}
+     <li id="objective{{objective.id}}"><b>{{ objective.text }}</b>
+     {% if objective.coverages %}
+     <ul>
+     {% for coverage in objective.coverages %}
+       <li> covers <a href="/standard/{{ay}}/{{coverage.standard}}#outcome{{coverage.knowledgeArea}}-{{coverage.id}}">{{coverage.standard}}: {{coverage.knowledgeArea}} #{{coverage.id}}</a></li>
+     {% endfor %}
+     </ul>
+     {% endif %}
+     </li>
+  {% endfor %}
+  </ul>
+{% endmacro %}
+
+
+{% block title %}
+     <title>{{ay}} Program: {{syllabus.name}}</title>
+{% endblock %}
+{% block content %}
+    <h1>Course: {{syllabus.title}}</h1>
+    <h3>Course Number</span>: {{syllabus.subject}}{{syllabus.number}}</h3>
+
+    <p><a href="/catalog/{{ay}}/{{syllabus.subject}}{{syllabus.number}}/printable">printable version</a></p>
+
+    <h2>Objectives</h2>
+    {{objectives(syllabus)}}
+
+    <h2>Outline</h2>
+    {{topics(syllabus.topics)}}
+
+  </body>
+</html>
+
+{% endblock %}
