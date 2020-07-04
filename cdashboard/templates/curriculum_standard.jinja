@@ -1,6 +1,6 @@
 {%  extends "base.jinja" %}
-{% macro topics(ka, tag) %}
-        <ol> {% for topic in ka.topics %}
+{% macro topics(topiclist, tag) %}
+        <ol> {% for topic in topiclist %}
              <li id="{{tag}}-{{topic.id}}"><b>{{ topic.text }}</b><br/>
                Coverage: <span class="{{'covered' if topic.coverage() == 1.0 else 'partially_covered' if topic.coverage() > 0.5 else 'not_covered'}}">
           {{ (10000*topic.coverage() + 0.5) // 1 / 100 }}%
@@ -11,8 +11,8 @@
                {% endfor %}
                </ul>
 
-               {% if topic.topics %}
-               {{ topics(topic, tag) }}
+               {% if topic.subtopics %}
+               {{ topics(topic.subtopics, tag) }}
                {% endif %}
              </li>
              {% endfor %}
@@ -33,7 +33,7 @@
           Coverage: <span class="{{'covered' if ka.topic_coverage() == 1.0 else 'partially_covered' if ka.topic_coverage() > 0.5 else 'not_covered'}}">
           {{ (10000*ka.topic_coverage() + 0.5) // 1 / 100 }}%
         </span>
-          {{ topics(ka, 'topic'+parent+ka.id) }}
+          {{ topics(ka.topics, 'topic'+parent+ka.id) }}
         {% endif %}
 
         {% if ka.outcomes %}
