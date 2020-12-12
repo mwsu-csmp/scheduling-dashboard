@@ -11,6 +11,16 @@
                {% endfor %}
                </ul>
 
+               {% if topic.subsumptions %}
+               Coverage of other standards:
+               <ul>
+               {% for reference in topic.subsumptions %}
+               <li><a href="/standard/{{ay}}/{{reference['standard']}}#topic{{reference['knowledgeArea']}}-{{reference['id']}}">
+                  {{reference['standard']}}#topic{{reference['knowledgeArea']}}-{{reference['id']}}</a></li>
+               {% endfor %}
+               </ul>
+               {% endif %}
+
                {% if topic.subtopics %}
                {{ topics(topic.subtopics, tag) }}
                {% endif %}
@@ -48,6 +58,17 @@
                   {{syllabus[0]}}{{syllabus[1]}} #{{syllabus[2]}}</a></li>
                {% endfor %}
              </ul>
+
+
+               {% if outcome.subsumptions %}
+               Coverage of other standards:
+               <ul>
+               {% for reference in outcome.subsumptions %}
+               <li><a href="/standard/{{ay}}/{{reference['standard']}}#outcome{{reference['knowledgeArea']}}-{{reference['id']}}">
+                  {{reference['standard']}}#outcome{{reference['knowledgeArea']}}-{{reference['id']}}</a></li>
+               {% endfor %}
+               </ul>
+               {% endif %}
              </li>
              {% endfor %}
         </ol>
